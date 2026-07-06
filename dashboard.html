@@ -34,8 +34,9 @@
   .stat-label{font-size:11.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft); font-weight:700;}
   .stat-value{font-family:'Space Grotesk'; font-size:30px; font-weight:700; color:var(--teal-700); margin-top:6px;}
 
-  .chart-grid{display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:28px;}
-  @media (max-width:800px){.chart-grid{grid-template-columns:1fr;}}
+  .chart-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-bottom:28px;}
+  @media (max-width:1000px){.chart-grid{grid-template-columns:1fr 1fr;}}
+  @media (max-width:650px){.chart-grid{grid-template-columns:1fr;}}
   .chart-card{background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); padding:20px; box-shadow:var(--shadow);}
   .chart-card h3{margin:0 0 14px; font-size:14px; font-family:'Space Grotesk';}
   .chart-card canvas{max-height:260px;}
@@ -47,6 +48,20 @@
     border:1.5px solid var(--line); border-radius:8px; padding:8px 12px; font-family:'Cairo';
     font-size:13px; width:220px;
   }
+  .filter-bar{
+    display:flex; flex-wrap:wrap; gap:10px; padding:16px 20px; border-bottom:1px solid var(--line);
+    background:var(--mist);
+  }
+  .filter-bar select{
+    border:1.5px solid var(--line); border-radius:8px; padding:8px 10px; font-family:'Cairo';
+    font-size:12.5px; background:#fff; color:var(--ink); min-width:130px;
+  }
+  .filter-bar button{
+    border:1.5px solid var(--line); border-radius:8px; padding:8px 14px; font-family:'Space Grotesk';
+    font-size:12px; font-weight:600; background:#fff; color:var(--ink-soft); cursor:pointer;
+  }
+  .filter-bar button:hover{border-color:var(--teal-700); color:var(--ink);}
+  .filter-count{font-size:12px; color:var(--ink-soft); align-self:center; margin-left:auto;}
   table{width:100%; border-collapse:collapse; font-size:13px;}
   th{
     text-align:left; padding:10px 14px; background:var(--mist); color:var(--ink-soft);
@@ -94,19 +109,32 @@
   <div class="chart-grid">
     <div class="chart-card"><h3>By Platform</h3><canvas id="platformChart"></canvas></div>
     <div class="chart-card"><h3>By Content Category</h3><canvas id="categoryChart"></canvas></div>
+    <div class="chart-card"><h3>By Language</h3><canvas id="languageChart"></canvas></div>
+    <div class="chart-card"><h3>By City (top 10)</h3><canvas id="cityChart"></canvas></div>
+    <div class="chart-card"><h3>By Nationality (top 10)</h3><canvas id="nationalityChart"></canvas></div>
+    <div class="chart-card"><h3>By Campaign Status</h3><canvas id="statusChart"></canvas></div>
   </div>
 
   <div class="table-card">
     <div class="table-header">
       <h3>All Registrations</h3>
-      <input type="text" id="searchInput" placeholder="Search name, email, city..." oninput="renderTable()">
+      <input type="text" id="searchInput" placeholder="Search name, email, city..." oninput="applyFilters()">
+    </div>
+    <div class="filter-bar">
+      <select id="filterPlatform" onchange="applyFilters()"><option value="">All Platforms</option></select>
+      <select id="filterCategory" onchange="applyFilters()"><option value="">All Categories</option></select>
+      <select id="filterCity" onchange="applyFilters()"><option value="">All Cities</option></select>
+      <select id="filterLanguage" onchange="applyFilters()"><option value="">All Languages</option></select>
+      <select id="filterStatus" onchange="applyFilters()"><option value="">All Statuses</option></select>
+      <button onclick="resetFilters()">Reset filters</button>
+      <span class="filter-count" id="filterCount"></span>
     </div>
     <div class="table-scroll">
       <table>
         <thead>
           <tr>
-            <th>Reg #</th><th>Name</th><th>City</th><th>Platforms</th>
-            <th>Category</th><th>Price</th><th>Status</th>
+            <th>Reg #</th><th>Name</th><th>City</th><th>Nationality</th><th>Platforms</th>
+            <th>Category</th><th>Language</th><th>Price</th><th>Status</th>
           </tr>
         </thead>
         <tbody id="tableBody"></tbody>
@@ -122,6 +150,10 @@ let dashboardKey = '';
 let allRecords = [];
 let platformChartInstance = null;
 let categoryChartInstance = null;
+let languageChartInstance = null;
+let cityChartInstance = null;
+let nationalityChartInstance = null;
+let statusChartInstance = null;
 
 function loadDashboard(){
   const key = document.getElementById('keyInput').value.trim();
@@ -138,9 +170,8 @@ function fetchData(){
         document.getElementById('keyGate').classList.add('hidden');
         document.getElementById('dashboardWrap').classList.remove('hidden');
         allRecords = res.records || [];
-        renderStats();
-        renderCharts();
-        renderTable();
+        populateFilterOptions();
+        applyFilters();
       } else {
         document.getElementById('keyError').style.display = 'block';
       }
@@ -151,11 +182,88 @@ function fetchData(){
     });
 }
 
-function renderStats(){
-  const total = allRecords.length;
-  const assigned = allRecords.filter(r => (r['Campaign'] || '').trim()).length;
+function uniqueValues(field, splitComma){
+  const set = new Set();
+  allRecords.forEach(r => {
+    let val = (r[field] || '').trim();
+    if(!val) return;
+    if(splitComma){
+      val.split(',').map(s=>s.trim()).filter(Boolean).forEach(v => set.add(v));
+    } else {
+      set.add(val);
+    }
+  });
+  return Array.from(set).sort();
+}
+
+function fillSelect(id, values, placeholder){
+  const el = document.getElementById(id);
+  const current = el.value;
+  el.innerHTML = `<option value="">${placeholder}</option>` +
+    values.map(v => `<option value="${v}">${v}</option>`).join('');
+  el.value = current && values.includes(current) ? current : '';
+}
+
+function populateFilterOptions(){
+  fillSelect('filterPlatform', uniqueValues('Social Media Platform', true), 'All Platforms');
+  fillSelect('filterCategory', uniqueValues('Content-Based Categories', false), 'All Categories');
+  fillSelect('filterCity', uniqueValues('City', false), 'All Cities');
+  fillSelect('filterLanguage', uniqueValues('Language', false), 'All Languages');
+
+  const statuses = new Set();
+  allRecords.forEach(r => {
+    const s = (r['Campaign Status'] || '').trim();
+    statuses.add(s || 'Pending');
+  });
+  fillSelect('filterStatus', Array.from(statuses).sort(), 'All Statuses');
+}
+
+function resetFilters(){
+  document.getElementById('searchInput').value = '';
+  ['filterPlatform','filterCategory','filterCity','filterLanguage','filterStatus'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  applyFilters();
+}
+
+function getFilteredRecords(){
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const fPlatform = document.getElementById('filterPlatform').value;
+  const fCategory = document.getElementById('filterCategory').value;
+  const fCity = document.getElementById('filterCity').value;
+  const fLanguage = document.getElementById('filterLanguage').value;
+  const fStatus = document.getElementById('filterStatus').value;
+
+  return allRecords.filter(r => {
+    if(q && !['Name','Email','City','Mobile #'].some(f => (r[f]||'').toLowerCase().includes(q))) return false;
+    if(fPlatform){
+      const platforms = (r['Social Media Platform']||'').split(',').map(s=>s.trim());
+      if(!platforms.includes(fPlatform)) return false;
+    }
+    if(fCategory && (r['Content-Based Categories']||'').trim() !== fCategory) return false;
+    if(fCity && (r['City']||'').trim() !== fCity) return false;
+    if(fLanguage && (r['Language']||'').trim() !== fLanguage) return false;
+    if(fStatus){
+      const status = (r['Campaign Status']||'').trim() || 'Pending';
+      if(status !== fStatus) return false;
+    }
+    return true;
+  });
+}
+
+function applyFilters(){
+  const filtered = getFilteredRecords();
+  document.getElementById('filterCount').textContent = `${filtered.length} of ${allRecords.length} shown`;
+  renderStats(filtered);
+  renderCharts(filtered);
+  renderTable(filtered);
+}
+
+function renderStats(records){
+  const total = records.length;
+  const assigned = records.filter(r => (r['Campaign'] || '').trim()).length;
   const pending = total - assigned;
-  const prices = allRecords.map(r => parseFloat(r['Price per post (SAR)'])).filter(n => !isNaN(n));
+  const prices = records.map(r => parseFloat(r['Price per post (SAR)'])).filter(n => !isNaN(n));
   const avg = prices.length ? Math.round(prices.reduce((a,b)=>a+b,0) / prices.length) : 0;
 
   document.getElementById('statTotal').textContent = total;
@@ -164,9 +272,9 @@ function renderStats(){
   document.getElementById('statAvgPrice').textContent = prices.length ? avg + ' SAR' : '—';
 }
 
-function countBy(field, splitComma){
+function countBy(records, field, splitComma){
   const counts = {};
-  allRecords.forEach(r => {
+  records.forEach(r => {
     let val = (r[field] || '').trim();
     if(!val) return;
     const items = splitComma ? val.split(',').map(s=>s.trim()).filter(Boolean) : [val];
@@ -175,51 +283,63 @@ function countBy(field, splitComma){
   return counts;
 }
 
-function renderCharts(){
-  const platformCounts = countBy('Social Media Platform', true);
-  const categoryCounts = countBy('Content-Based Categories', false);
+function topN(counts, n){
+  const entries = Object.entries(counts).sort((a,b) => b[1]-a[1]);
+  const top = entries.slice(0, n);
+  const rest = entries.slice(n).reduce((sum, [,v]) => sum + v, 0);
+  const result = {};
+  top.forEach(([k,v]) => { result[k] = v; });
+  if(rest > 0) result['Other'] = rest;
+  return result;
+}
 
-  const teal = '#3E8F82', gold = '#B8933E';
-
-  if(platformChartInstance) platformChartInstance.destroy();
-  platformChartInstance = new Chart(document.getElementById('platformChart'), {
+function makeBarChart(prevInstance, canvasId, counts, color, horizontal){
+  if(prevInstance) prevInstance.destroy();
+  return new Chart(document.getElementById(canvasId), {
     type: 'bar',
     data: {
-      labels: Object.keys(platformCounts),
-      datasets: [{ data: Object.values(platformCounts), backgroundColor: teal, borderRadius: 6 }]
+      labels: Object.keys(counts),
+      datasets: [{ data: Object.values(counts), backgroundColor: color, borderRadius: 6 }]
     },
-    options: { plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true, ticks:{precision:0}}} }
-  });
-
-  if(categoryChartInstance) categoryChartInstance.destroy();
-  categoryChartInstance = new Chart(document.getElementById('categoryChart'), {
-    type: 'bar',
-    data: {
-      labels: Object.keys(categoryCounts),
-      datasets: [{ data: Object.values(categoryCounts), backgroundColor: gold, borderRadius: 6 }]
-    },
-    options: { indexAxis:'y', plugins:{legend:{display:false}}, scales:{x:{beginAtZero:true, ticks:{precision:0}}} }
+    options: {
+      indexAxis: horizontal ? 'y' : 'x',
+      plugins:{legend:{display:false}},
+      scales: horizontal
+        ? { x:{beginAtZero:true, ticks:{precision:0}} }
+        : { y:{beginAtZero:true, ticks:{precision:0}} }
+    }
   });
 }
 
-function renderTable(){
-  const q = document.getElementById('searchInput').value.trim().toLowerCase();
-  const filtered = allRecords.filter(r => {
-    if(!q) return true;
-    return ['Name','Email','City','Mobile #'].some(f => (r[f]||'').toLowerCase().includes(q));
-  });
+function renderCharts(records){
+  const teal = '#3E8F82', gold = '#B8933E', teal500 = '#6FB8AC', goldDeep = '#8C6C24';
 
+  platformChartInstance = makeBarChart(platformChartInstance, 'platformChart', countBy(records, 'Social Media Platform', true), teal, false);
+  categoryChartInstance = makeBarChart(categoryChartInstance, 'categoryChart', countBy(records, 'Content-Based Categories', false), gold, true);
+  languageChartInstance = makeBarChart(languageChartInstance, 'languageChart', countBy(records, 'Language', false), teal500, false);
+  cityChartInstance = makeBarChart(cityChartInstance, 'cityChart', topN(countBy(records, 'City', false), 10), goldDeep, true);
+  nationalityChartInstance = makeBarChart(nationalityChartInstance, 'nationalityChart', topN(countBy(records, 'Nationality', false), 10), teal, true);
+
+  const statusCounts = {};
+  records.forEach(r => {
+    const s = (r['Campaign Status']||'').trim() || 'Pending';
+    statusCounts[s] = (statusCounts[s]||0) + 1;
+  });
+  statusChartInstance = makeBarChart(statusChartInstance, 'statusChart', statusCounts, gold, false);
+}
+
+function renderTable(records){
   const tbody = document.getElementById('tableBody');
   const emptyState = document.getElementById('emptyState');
 
-  if(filtered.length === 0){
+  if(records.length === 0){
     tbody.innerHTML = '';
     emptyState.classList.remove('hidden');
     return;
   }
   emptyState.classList.add('hidden');
 
-  tbody.innerHTML = filtered.slice().reverse().map(r => {
+  tbody.innerHTML = records.slice().reverse().map(r => {
     const status = (r['Campaign Status'] || '').trim();
     const isPending = !status || /pending/i.test(status);
     const pillLabel = status || 'Pending';
@@ -227,8 +347,10 @@ function renderTable(){
       <td>${r['Registration ID'] || '—'}</td>
       <td>${r['Name'] || '—'}</td>
       <td>${r['City'] || '—'}</td>
+      <td>${r['Nationality'] || '—'}</td>
       <td>${r['Social Media Platform'] || '—'}</td>
       <td>${r['Content-Based Categories'] || '—'}</td>
+      <td>${r['Language'] || '—'}</td>
       <td>${r['Price per post (SAR)'] ? r['Price per post (SAR)'] + ' SAR' : '—'}</td>
       <td><span class="pill${isPending ? ' pending' : ''}">${pillLabel}</span></td>
     </tr>`;
