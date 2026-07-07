@@ -77,6 +77,33 @@
   .key-gate input{width:100%; border:1.5px solid var(--line); border-radius:10px; padding:12px 14px; font-family:'Cairo'; font-size:14px; margin:14px 0;}
   .key-gate button{width:100%; background:var(--ink); color:var(--mist); border:none; border-radius:10px; padding:12px; font-family:'Space Grotesk'; font-weight:600; cursor:pointer;}
   .hidden{display:none !important;}
+  .details-btn{
+    border:1.5px solid var(--line); background:#fff; color:var(--teal-700);
+    font-family:'Space Grotesk'; font-size:11.5px; font-weight:700; border-radius:8px;
+    padding:5px 12px; cursor:pointer;
+  }
+  .details-btn:hover{background:var(--teal-700); color:#fff; border-color:var(--teal-700);}
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(18,36,32,0.55); z-index:100;
+    display:flex; align-items:center; justify-content:center; padding:20px;
+  }
+  .modal-box{
+    background:var(--paper); border-radius:var(--radius); max-width:600px; width:100%;
+    max-height:85vh; overflow-y:auto; box-shadow:var(--shadow); padding:28px;
+  }
+  .modal-header{display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px;}
+  .modal-header h2{font-family:'Space Grotesk'; font-size:20px; margin:0;}
+  .modal-close{background:none; border:none; font-size:22px; cursor:pointer; color:var(--ink-soft); line-height:1;}
+  .modal-close:hover{color:var(--ink);}
+  .modal-section{margin-bottom:18px;}
+  .modal-section-title{
+    font-size:11px; text-transform:uppercase; letter-spacing:.08em; font-weight:700;
+    color:var(--teal-700); margin-bottom:8px;
+  }
+  .modal-row{display:flex; justify-content:space-between; gap:16px; padding:7px 0; border-bottom:1px solid var(--line); font-size:13.5px;}
+  .modal-row:last-child{border-bottom:none;}
+  .modal-row .mlabel{color:var(--ink-soft); font-weight:600;}
+  .modal-row .mvalue{font-weight:700; text-align:right;}
 </style>
 </head>
 <body>
@@ -118,7 +145,7 @@
   <div class="table-card">
     <div class="table-header">
       <h3>All Registrations</h3>
-      <input type="text" id="searchInput" placeholder="Search name, email, city..." oninput="applyFilters()">
+      <input type="text" id="searchInput" placeholder="Search reg #, name, city, language, price, nationality..." oninput="applyFilters()" style="width:320px;">
     </div>
     <div class="filter-bar">
       <select id="filterPlatform" onchange="applyFilters()"><option value="">All Platforms</option></select>
@@ -134,13 +161,23 @@
         <thead>
           <tr>
             <th>Reg #</th><th>Name</th><th>City</th><th>Nationality</th><th>Platforms</th>
-            <th>Category</th><th>Language</th><th>Price</th><th>Status</th>
+            <th>Category</th><th>Language</th><th>Price</th><th>Status</th><th></th>
           </tr>
         </thead>
         <tbody id="tableBody"></tbody>
       </table>
       <div class="empty hidden" id="emptyState">No registrations yet.</div>
     </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="modalOverlay" onclick="if(event.target===this) closeModal()">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2>Registration Details</h2>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div id="modalBody"></div>
   </div>
 </div>
 
@@ -210,6 +247,7 @@ function populateFilterOptions(){
   fillSelect('filterCity', uniqueValues('City', false), 'All Cities');
   fillSelect('filterLanguage', uniqueValues('Language', false), 'All Languages');
 
+  // Status is a bit special: blank counts as "Pending"
   const statuses = new Set();
   allRecords.forEach(r => {
     const s = (r['Campaign Status'] || '').trim();
@@ -235,7 +273,7 @@ function getFilteredRecords(){
   const fStatus = document.getElementById('filterStatus').value;
 
   return allRecords.filter(r => {
-    if(q && !['Name','Email','City','Mobile #'].some(f => (r[f]||'').toLowerCase().includes(q))) return false;
+    if(q && !['Registration ID','Name','City','Language','Price per post (SAR)','Nationality','Email','Mobile #'].some(f => String(r[f]||'').toLowerCase().includes(q))) return false;
     if(fPlatform){
       const platforms = (r['Social Media Platform']||'').split(',').map(s=>s.trim());
       if(!platforms.includes(fPlatform)) return false;
@@ -339,7 +377,9 @@ function renderTable(records){
   }
   emptyState.classList.add('hidden');
 
-  tbody.innerHTML = records.slice().reverse().map(r => {
+  window.currentTableRecords = records.slice().reverse();
+
+  tbody.innerHTML = window.currentTableRecords.map((r, idx) => {
     const status = (r['Campaign Status'] || '').trim();
     const isPending = !status || /pending/i.test(status);
     const pillLabel = status || 'Pending';
@@ -353,12 +393,90 @@ function renderTable(records){
       <td>${r['Language'] || '—'}</td>
       <td>${r['Price per post (SAR)'] ? r['Price per post (SAR)'] + ' SAR' : '—'}</td>
       <td><span class="pill${isPending ? ' pending' : ''}">${pillLabel}</span></td>
+      <td><button class="details-btn" onclick="openModal(${idx})">Details</button></td>
     </tr>`;
   }).join('');
 }
 
+function waLink(mobile){
+  const digits = String(mobile||'').replace(/[^0-9]/g,'');
+  if(!digits) return '—';
+  return `<a href="https://wa.me/${digits}" target="_blank" rel="noopener" style="color:var(--teal-700); text-decoration:none;">${mobile} ↗</a>`;
+}
+
+function platformLink(type, handle){
+  if(!handle || !String(handle).trim()) return '—';
+  const clean = String(handle).trim().replace(/^@/, '');
+  const urls = {
+    snapchat: `https://www.snapchat.com/add/${clean}`,
+    instagram: `https://www.instagram.com/${clean}`,
+    tiktok: `https://www.tiktok.com/@${clean}`
+  };
+  const url = urls[type];
+  return `<a href="${url}" target="_blank" rel="noopener" style="color:var(--teal-700); text-decoration:none;">${handle} ↗</a>`;
+}
+
+function field(r, key, suffix){
+  const v = r[key];
+  if(v === undefined || v === null || String(v).trim() === '') return '—';
+  return suffix ? `${v} ${suffix}` : v;
+}
+
+function openModal(idx){
+  const r = window.currentTableRecords[idx];
+  if(!r) return;
+
+  const status = (r['Campaign Status'] || '').trim() || 'Pending';
+  const isPending = /pending/i.test(status) || !r['Campaign Status'];
+
+  const sections = [
+    { title: 'Registration', rows: [
+      ['Registration #', field(r,'Registration ID')],
+      ['Submitted', field(r,'Timestamp')]
+    ]},
+    { title: 'Contact', rows: [
+      ['Name', field(r,'Name')],
+      ['Email', field(r,'Email')],
+      ['Mobile', waLink(r['Mobile #'])],
+      ['City', field(r,'City')],
+      ['Address', field(r,'Address')],
+      ['Nationality', field(r,'Nationality')]
+    ]},
+    { title: 'Platforms & Content', rows: [
+      ['Platforms', field(r,'Social Media Platform')],
+      ['Snapchat', platformLink('snapchat', r['Snapchat Profile'])],
+      ['Instagram', platformLink('instagram', r['Instagram Profile'])],
+      ['TikTok', platformLink('tiktok', r['Tiktok Profile'])],
+      ['Category', field(r,'Content-Based Categories')],
+      ['Language', field(r,'Language')],
+      ['Price per post', field(r,'Price per post (SAR)','SAR')]
+    ]},
+    { title: 'Campaign (set by your team)', rows: [
+      ['Campaign', field(r,'Campaign')],
+      ['Status', `<span class="pill${isPending ? ' pending' : ''}">${status}</span>`],
+      ['Final price', field(r,'Final Price (SAR)','SAR')]
+    ]}
+  ];
+
+  document.getElementById('modalBody').innerHTML = sections.map(sec => `
+    <div class="modal-section">
+      <div class="modal-section-title">${sec.title}</div>
+      ${sec.rows.map(([label,value]) => `<div class="modal-row"><span class="mlabel">${label}</span><span class="mvalue">${value}</span></div>`).join('')}
+    </div>
+  `).join('');
+
+  document.getElementById('modalOverlay').classList.remove('hidden');
+}
+
+function closeModal(){
+  document.getElementById('modalOverlay').classList.add('hidden');
+}
+
 document.getElementById('keyInput').addEventListener('keydown', (e) => {
   if(e.key === 'Enter') loadDashboard();
+});
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'Escape') closeModal();
 });
 </script>
 </body>
