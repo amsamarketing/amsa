@@ -104,6 +104,55 @@
   .modal-row:last-child{border-bottom:none;}
   .modal-row .mlabel{color:var(--ink-soft); font-weight:600;}
   .modal-row .mvalue{font-weight:700; text-align:right;}
+
+  @media (max-width:700px){
+    .wrap{padding:20px 12px 60px;}
+    h1{font-size:22px; margin-bottom:14px;}
+    .top-bar{flex-direction:column; align-items:flex-start; gap:10px;}
+    button.refresh{width:100%;}
+
+    .stat-grid{grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px;}
+    .stat-card{padding:14px;}
+    .stat-value{font-size:22px;}
+
+    .chart-grid{gap:14px; margin-bottom:20px;}
+    .chart-card{padding:14px;}
+    .chart-card canvas{max-height:200px;}
+
+    .table-header{flex-direction:column; align-items:stretch; padding:14px;}
+    #searchInput{width:100% !important;}
+    .filter-bar{padding:12px; gap:8px;}
+    .filter-bar select{flex:1 1 45%; min-width:0; font-size:12px;}
+    .filter-bar button{flex:1 1 100%;}
+    .filter-count{margin-left:0; width:100%; text-align:center;}
+
+    /* Card-style table for mobile: hide header row, stack each cell as a labeled line */
+    table thead{display:none;}
+    table, table tbody, table tr, table td{display:block; width:100%;}
+    .table-scroll{padding:10px;}
+    table tr{
+      border:1px solid var(--line); border-radius:12px; margin-bottom:10px;
+      padding:10px 14px; background:#fff;
+    }
+    table td{
+      border-top:none; padding:6px 0; display:flex; justify-content:space-between;
+      align-items:center; gap:10px; font-size:13px; text-align:right;
+    }
+    table td[data-label]::before{
+      content:attr(data-label); font-weight:700; color:var(--ink-soft);
+      font-size:10.5px; text-transform:uppercase; letter-spacing:.04em;
+      flex-shrink:0; text-align:left;
+    }
+    table td:last-child{justify-content:flex-end; padding-top:10px;}
+    table td:last-child .details-btn{width:100%;}
+
+    .modal-box{padding:18px; max-height:90vh;}
+    .modal-header h2{font-size:17px;}
+    .modal-row{font-size:12.5px;}
+  }
+  @media (max-width:420px){
+    .stat-grid{grid-template-columns:1fr;}
+  }
 </style>
 </head>
 <body>
@@ -384,15 +433,15 @@ function renderTable(records){
     const isPending = !status || /pending/i.test(status);
     const pillLabel = status || 'Pending';
     return `<tr>
-      <td>${r['Registration ID'] || '—'}</td>
-      <td>${r['Name'] || '—'}</td>
-      <td>${r['City'] || '—'}</td>
-      <td>${r['Nationality'] || '—'}</td>
-      <td>${r['Social Media Platform'] || '—'}</td>
-      <td>${r['Content-Based Categories'] || '—'}</td>
-      <td>${r['Language'] || '—'}</td>
-      <td>${r['Price per post (SAR)'] ? r['Price per post (SAR)'] + ' SAR' : '—'}</td>
-      <td><span class="pill${isPending ? ' pending' : ''}">${pillLabel}</span></td>
+      <td data-label="Reg #">${r['Registration ID'] || '—'}</td>
+      <td data-label="Name">${r['Name'] || '—'}</td>
+      <td data-label="City">${r['City'] || '—'}</td>
+      <td data-label="Nationality">${r['Nationality'] || '—'}</td>
+      <td data-label="Platforms">${r['Social Media Platform'] || '—'}</td>
+      <td data-label="Category">${r['Content-Based Categories'] || '—'}</td>
+      <td data-label="Language">${r['Language'] || '—'}</td>
+      <td data-label="Price">${r['Price per post (SAR)'] ? r['Price per post (SAR)'] + ' SAR' : '—'}</td>
+      <td data-label="Status"><span class="pill${isPending ? ' pending' : ''}">${pillLabel}</span></td>
       <td><button class="details-btn" onclick="openModal(${idx})">Details</button></td>
     </tr>`;
   }).join('');
