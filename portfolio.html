@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Portfolio — AMSA Marketing &amp; PR Agency</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal-900:#1F433D; --teal-700:#3E8F82; --teal-500:#6FB8AC;
+    --gold:#B8933E; --gold-deep:#8C6C24;
+    --mist:#F2F7F6; --ink:#122420; --ink-soft:#5C7A73;
+    --paper:#FFFFFF; --line:rgba(18,36,32,0.11); --rust:#B54B3A;
+    --radius:18px; --shadow:0 24px 55px -28px rgba(18,50,44,0.4);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper); color:var(--ink); font-family:'Cairo',sans-serif;
+    -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  }
+  a{color:inherit;}
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 24px; }
+  h1,h2,h3{ font-family:'Space Grotesk',sans-serif; letter-spacing:-0.01em; margin:0; }
+  html[dir="rtl"] h1, html[dir="rtl"] h2, html[dir="rtl"] h3{ font-family:'Cairo',sans-serif; }
+  .eyebrow{
+    font-family:'Space Grotesk',sans-serif; text-transform:uppercase; letter-spacing:.14em;
+    font-size:11.5px; font-weight:600; color:var(--teal-700);
+  }
+  html[dir="rtl"] .eyebrow{ font-family:'Cairo',sans-serif; letter-spacing:0; }
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:6px;
+    font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:13.5px;
+    padding:11px 22px; border-radius:10px; text-decoration:none; cursor:pointer;
+    border:none; transition:.15s;
+  }
+  html[dir="rtl"] .btn{ font-family:'Cairo',sans-serif; }
+  .btn-primary{ background:var(--ink); color:#fff; }
+  .btn-primary:hover{ background:var(--teal-900); }
+  .btn-gold{ background:var(--gold); color:#fff; }
+  .btn-gold:hover{ background:var(--gold-deep); }
+  .btn-outline{ background:transparent; border:1.5px solid var(--line); color:var(--ink); }
+  .btn-outline:hover{ border-color:var(--ink); }
+
+  header.site{
+    position:sticky; top:0; z-index:50; background:rgba(255,255,255,0.92);
+    backdrop-filter:blur(10px); border-bottom:1px solid var(--line);
+  }
+  .header-inner{ display:flex; align-items:center; justify-content:space-between; padding:14px 0; gap:16px; }
+  .brand{ display:flex; align-items:center; gap:10px; text-decoration:none; }
+  .brand img{ width:36px; height:36px; object-fit:contain; }
+  .brand-text{ font-family:'Space Grotesk'; font-weight:700; font-size:14px; color:var(--ink); line-height:1.15; }
+  .brand-text small{ display:block; font-size:9.5px; font-weight:600; color:var(--ink-soft); letter-spacing:.04em; text-transform:uppercase; }
+  nav.main-nav{ display:flex; align-items:center; gap:22px; }
+  nav.main-nav a{
+    font-size:13.5px; font-weight:600; text-decoration:none; color:var(--ink-soft); transition:.15s;
+    padding:4px 0; border-bottom:2px solid transparent;
+  }
+  nav.main-nav a:hover, nav.main-nav a.active{ color:var(--ink); border-bottom-color:var(--teal-700); }
+  .header-ctas{ display:flex; gap:8px; align-items:center; }
+  .lang-toggle{ display:flex; gap:4px; background:var(--mist); border-radius:999px; padding:3px; }
+  .lang-toggle button{
+    font-family:'Space Grotesk'; font-size:11px; font-weight:700; padding:5px 11px;
+    border-radius:999px; border:none; background:none; color:var(--ink-soft); cursor:pointer;
+  }
+  .lang-toggle button.active{ background:var(--teal-700); color:#fff; }
+  .menu-toggle{ display:none; background:none; border:none; font-size:22px; cursor:pointer; color:var(--ink); }
+
+  @media (max-width:940px){
+    nav.main-nav{
+      position:fixed; top:64px; left:0; right:0; background:#fff; flex-direction:column;
+      align-items:flex-start; padding:20px 24px; border-bottom:1px solid var(--line);
+      gap:16px; display:none; box-shadow:var(--shadow);
+    }
+    nav.main-nav.open{ display:flex; }
+    .header-ctas{ display:none; }
+    .header-ctas.open{ display:flex; flex-direction:column; align-items:stretch; width:100%; margin-top:6px; gap:10px; }
+    .menu-toggle{ display:block; }
+  }
+
+  footer.site{ background:var(--teal-900); color:rgba(255,255,255,0.85); margin-top:80px; }
+  footer.site .wrap{ padding:56px 24px 28px; }
+  .footer-grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:40px; }
+  @media (max-width:800px){ .footer-grid{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:520px){ .footer-grid{ grid-template-columns:1fr; } }
+  footer.site h4{ font-family:'Space Grotesk'; font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:var(--gold); margin-bottom:14px; }
+  html[dir="rtl"] footer.site h4{ font-family:'Cairo'; letter-spacing:0; }
+  footer.site a{ text-decoration:none; color:rgba(255,255,255,0.75); font-size:13.5px; display:block; margin-bottom:9px; }
+  footer.site a:hover{ color:#fff; }
+  footer.site .foot-brand{ display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+  footer.site .foot-brand img{ width:32px; height:32px; }
+  footer.site .foot-brand span{ font-family:'Space Grotesk'; font-weight:700; font-size:14px; color:#fff; }
+  footer.site p.tagline{ font-size:13px; color:rgba(255,255,255,0.6); line-height:1.6; max-width:280px; }
+  .foot-bottom{
+    border-top:1px solid rgba(255,255,255,0.12); margin-top:40px; padding-top:20px;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; font-size:12px; color:rgba(255,255,255,0.5);
+  }
+
+  section{ padding:70px 0; }
+  section.tight{ padding:40px 0; }
+  .section-head{ max-width:600px; margin-bottom:44px; }
+  .section-head h2{ font-size:clamp(26px,4vw,38px); margin-top:8px; line-height:1.1; }
+  .section-head p{ color:var(--ink-soft); font-size:15px; margin-top:12px; line-height:1.6; }
+  .section-head.center{ margin-left:auto; margin-right:auto; text-align:center; }
+
+  .card{
+    background:#fff; border:1px solid var(--line); border-radius:var(--radius);
+    padding:28px; box-shadow:var(--shadow);
+  }
+  .grid-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
+  .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+  .grid-4{ display:grid; grid-template-columns:repeat(4,1fr); gap:22px; }
+  @media (max-width:900px){ .grid-3, .grid-4{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:640px){ .grid-3, .grid-2, .grid-4{ grid-template-columns:1fr; } }
+
+  .stat{ text-align:center; }
+  .stat .num{ font-family:'Space Grotesk'; font-weight:700; font-size:clamp(30px,5vw,44px); color:var(--teal-700); }
+  html[dir="rtl"] .stat .num{ font-family:'Cairo'; }
+  .stat .lbl{ font-size:12px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.06em; font-weight:700; margin-top:6px; }
+  html[dir="rtl"] .stat .lbl{ letter-spacing:0; }
+
+  .cta-band{
+    background:linear-gradient(120deg, var(--teal-900), var(--teal-700) 70%, var(--gold-deep));
+    border-radius:24px; padding:50px 40px; color:#fff; text-align:center;
+  }
+  .cta-band h2{ color:#fff; font-size:clamp(24px,4vw,34px); }
+  .cta-band p{ color:rgba(255,255,255,0.85); margin:12px auto 26px; max-width:480px; font-size:14.5px; }
+  .cta-band .btn-row{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+
+  .placeholder-badge{
+    display:inline-block; background:rgba(184,147,62,0.14); color:var(--gold-deep);
+    font-size:10.5px; font-weight:700; padding:3px 9px; border-radius:6px; margin-bottom:8px;
+    text-transform:uppercase; letter-spacing:.04em;
+  }
+  html[dir="rtl"] .placeholder-badge{ letter-spacing:0; }
+  .process-step{ display:flex; gap:18px; align-items:flex-start; }
+  .process-num{
+    width:40px; height:40px; border-radius:50%; background:var(--mist); color:var(--teal-700);
+    display:flex; align-items:center; justify-content:center; font-family:'Space Grotesk'; font-weight:700;
+    flex-shrink:0;
+  }
+  .testimonial{ font-size:15px; line-height:1.7; font-style:italic; color:var(--ink); }
+  .testimonial-author{ margin-top:14px; font-size:12.5px; font-weight:700; color:var(--ink-soft); font-style:normal; }
+</style>
+</head>
+<body>
+<header class="site">
+  <div class="wrap header-inner">
+    <a class="brand" href="index.html">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfUAAAFICAYAAABJHGe6AAAgIUlEQVR4nO3dT04byxbH8TJ6e4gVryGGCWwBZcYcpCwgC/AoIMiIBWQBkWDuWeQtwAScNThyNoHf4LpCY9x2VXf9Oafq+5GebnJzH3SMXb8+p/70YLVaGcg2Xy7sPwfGGPP7759vLf/d9ea/Gw9HV83ff/rw8Xvjz1brfwa8WgBALgNCXY5meNvg3hbUsYyHoysb+uPhaEXYA4AuhHpGNsTvnx8vU4a3j2bQXxyd8GYBAMEI9cTmy4W5f368XP9aZJDvc354fGAMIQ8A0hDqCdgg1xriuxDwACAHoR7JfLkw8+VicP/8+JL7WlIh4AEgL0I9sJKrch8EPACkR6gHkiPMN7er7ZLrJsMutCPcASA+Qr2n2GFug/vTh4/fQ+0rt1MD9ve///75liL0zw+PDwh3AIiHUO8oRpjbAD8/PL5Z/z7Ul3Z29/Tw74CbWEFPuANAHIR6B5PZNFiYj4ejq5whvo8N+RgL/gh3AAiLUPdw9/QQZDW7DXKJIb7P3dPDIHQVT7gDQBiEuoMQrXbpFXkXoW5yjGFBHQCEQKjv0Te4NFflrkK26KnaAaA7Qn2HPoFeQ5hvE6p6J9wBwB+h3qLrYrhaw3xTiHAn2AHAD6G+Yb5cmMls2ulFIYTeCxHut6dng9pvkgDABaHe0DWAxsPR1e3p2U2MaypF33DnhgkA9iPU17qGDmHjru9DbnitAWA3Qt10C3TmzrvruwCRrggAbFd9qHcNdIKlvz7hzjw7ALxXdah3WRRHCzisPsHOzwIA3qo21Al0WbpuIeRnAgCvqgx1Al0mFisCQD8HuS8gBwJdpoujk9X54bH3e/L++fHFHlULADWrLtR9B38CPa2Lo5PV7emZd0AT7ABQWaj7tncJ9DzGw5H59eXrYDwcXfn8/+6fH1/my0WsywIA8aoKdZ9AHw9HVwR6XrenZze+wT6ZTVcEO4BaVbNQzrdK//XlK61cIbosoOPnB6BGVVTqXdruMa8HfrosoJvMppexrgcApKoivJhH18832OfLxTUL5wDUpvhQ9x3YCXS5fIOdFfEAalN8qNN2L0uXYPddOMeNAACtig4xqvQyXRydrHxWxd8/PzK/DqAKRYc6VXq5fLa7+c6vd33ADADkVmyQ+Vbp4+GIKl0Zn8ffurbhab0D0KzYUO/wjPRYl4KIfI6UpQ0PoHRFhnqX891jXQviGg9Hzj8/lzY8rXcAmhUZZh2qdFrvivmsiOd8eAAlKy7Uu8yJ0nrXz2dFfFsbnvl0ANoVF+odqnSvB4ZALteFc/Pl4ppqHUCJigr1LpXWpw8fv8e4FuThunBuW7XOfDoA7YoKdQZluC6c26zWab0DKEExoc6gDMt1fp0tbgBKU0yoA03nh8d759eb1TpdHgAlKCbUGZTR5NqGv39+vGTRHIBSFBHqfVrvv//++RbyWiCHSxt+vlxc04YHUIoiQp1gRhvXNnyKawGA2NSH+ny5YFBGq/FwxFkEAKpRQqj3WvXODUH5fJ7mBgCaqQ/1EAvkWChVPh7aA6AGqge6UGHMQqny+ZwNDwBaaQ/1IAfO0IKvg8uiOQDQTHWoh0QLvnwsmgNQOtWhHvLAGVrwdaBaB1Ay1aEeEo/jrAPVOoCSqQ31GA9woVqvA9U6gFKpDfUYqNbrQLUOoFRqQz3WA1wms+kqxteFLFTrAEqkNtRjmsymtOELR7UOoEQqQz12i5w2fB2o1gGURmWopzCZTVcEe9mo1gGUhlDfgdXw5aNaB1ASlaEe6nhYh+9zzfx62ajWAZREZainNF8urmPsiYccVOsASkGoO7h/fnwh2Ms1Ho5yXwIABKEy1H///fMt9fck2MtGCx5ACVSGei4Ee7lowQMoAaHuiWAvEy14ACUg1Dsg2MtECx6Adv/LfQFdfPrw8ft8ubjOeQ3rs+cPLo5OOCu+xXy5cDpLP3aY3p6eObXWzw+Pb3K/rwCgD5WhLsX98+PL779/rlxDozau5wkkCFKnnw8teADa0X7viQNq5PM57pcWPADNVIb6eDgS1fKeLxfXn3/+WDHP/lasx+P68jnu99OHj99jXgsAxKQy1KViAd0rSQ/D8WnvS7thBAAfKkNd8twnwf6fVOfzu5J0kwEAsagMdWNkz33ePz++fP75o+pHt+Y49W8X1xa85BtGANhHbahrMJlNq51n17w1TPINIwDsojbUtSxoqrEdL/HvO18urmvunACog9pQ17SgybbjJYYd3tNywwgAmzSHeu5L8FZL1S5lK9smj3l1NTeMANCkNtSN0Tn3ySK6fGjBAyid6lDX/LjMUhfRlfh3AgAtVIe6xhZ80/3z48tkNr2kekzH53Q5ANBGdagbo7MF37Q+O76Yql3qfLrlstVO+80igHqpD3XNLfgmW7VrDnctHQct1wkAvtSH+ng4Ul+tW/Pl4lrzCnlpR8O2oQUPoFTqQ92Ycqp1S+u+dglHw54fHh/su8nTfNodAOxSRKiXVK03aavaJYSl6x5zWvAASlREqBtTXrVuaanapVzfeDhyei/QggdQomJCvfQVy9qq9hzOD48PjCn/vQAAbYoJdWOMuT09Kzr0JFftEubTm1zm1WnBAyhNUaFe6tz6Jonb36TNp9OCB1CjokLdmHLn1jdJ2v4m4RqMoe0OAMWF+nqhVHF/rzaSW/Ipbf7MXbo2tOABlKbI8Ls4Oqnu0Zk5q3bpR8MCQC2KDHVjyl80t02Oql1KpbvtRo55dQC1KTbUa2vDN6UMdwlHw7a12V3m2GnBAyhJ0aF3cXSyqmE1fBspC+li+/Th4/e2P6v55w+gPkWHujHG3J6eVbEavk3sql36fDoteAA1KT7Ujalzfn1TjKpdStu678JICXvsASCEKkK95vn1ptBVu+T59MafO7XgpdygAEAf1QTdxdHJimD/T6hwl3A07K75dB+04AGUoKqQI9jf6tuSl9C2dnnUqsu8uoS/CwD0VV3A1b4iflPXql3KqnqXbWuux8fSggegXXWhbsx/K+IJ9rc0bn/z6bq4/LxpwQPQrspQN4Zg38anape+lW0TLXgANag21I0h2Ntoqdp9trLRggdQg6pD3RiCvc2uql1D4G9DCx5A6aoPdWMI9l3unx9fJrPpZbOClbCLoMv3d2nBA4BmhPra7enZTe6gkmq+XFxPZtM3VbuEYI+BB7wA0Ky4QbmPUoMqlM2q/eLoZHV7ejbI0eXocjSs6+lytOABaEWAbSDYd9us2sfDUfIuB1MlALAd4bUFwb7f5gr5lK9Zn6NhXbe20YIHoBHB1cK2lnNfh2SbK+Qvjk5Wv758HcQOd5ejYXf8f0NeCgCIQqjvMB6OzK8vX7PMGWuSumrvG8zMqwMo1WC16vUo6mrcPT0MtJ2ilsP54fFBcxHbemFdsJPaNr9+F/Plwkxm071fY70IsM+3AoCkqNQdMc/uZrNql7hVkKAGUCpRg610zLO7adv6FuJr95lP3/g6tOABFIf2e0e0491stsv7vm6/vnwNcnPg2oIP9f0AIAUq9Y5ox7sJuYgux+vN1jYAmhBKPdCOd2O3vjXb8blviDhdDkCJCPWe7La33CGlQfMkui5HzPZd9d4Fz1gHoAlBFIiE6lODZjve54jZGGcFuD61jRY8AC0IoYBSnaim3bbV8ftesz5Hw7Zx3dpGCx6AFoRPBFTt+20+GCbXa+bSAaAFD0ALgieSnI8l1aTZjt/1msWaT6cFD6AkhHpEOR5LqtG+efaYN0a04AGUhLBJgKp9PzvPbn/fbMfHmE9vogUPoBScKJcYJ9Ht13yQyt3Tw2A8HK1intfOA14AlIJKPTGq9v02F9BJCVJa8ACkI9QzYK59v83jZWNyPV2OFjwA6QiVjGzVTrhvlzLYXbEKHoBkhElm4+GIfe07pAp2161ttOABSEaQCMFpdO02V8bHIGXeHgD6IECEoWrfbn0CXexgd5pXpwUPQCrCQyCq9u1iBzsteADaERqCUbW/N18urpvPZg+JFjwA7QgM4ajat5vMprGCnRY8ALUICiXY/vZejGCnBQ9AMwJCEba/vRc62GnBA9CMcFCIlvxbEYKdFjwAlQgFxajaX4UMdlrwALQiEJSjan9FyAKoXfVBUAqq9nD72H0e8EILHoAkVYdAaaja05w810R3AIAk1Q7+Jat9+1uIYHedVwcASaoc9GtQ+/a3+XJx3efpbrTgAWhU5YBfk5pb8hKfxw4AMVU30Neq1qr9/vnxpWslzdY2ANoMVqtV7mtAYndPD4P758eX3NeR0u3p2aDLaXGff/5w+oB0/foAEFJ1lRvqrNq7VtMu8+oAIEVVAzte1TbX3nVFPC14AJpUMaCjXU1Ve5cV8a4tdVbBA5CgisEcu9VUtXdZOEcLHoAWxQ/icFdL1T6ZTb1Wh9KCB6BF8QM4drt7ehhMZtNLW73WUrXHOEqWFjyA3IoeuOFmvYhs1ZxvLr1q95lfdz1dDgByK3bQhpvff/98s7/ePIHNniFfaqD5zK/TggegAaFeuflycd38/f3z48vnnz/+Ve3j4cjcnp7dlFq1hw5hWvAAcipyoIabXe3nbVV7icHu2oanBQ9Ag+IGaYSzWbWXuoiuz/nwLV+PFjyALIoanOHH9fz3Gqp2lyB2nVenBQ8gl6IGZrjzDZ3Sg92lDU8LHoB0xQzK8DNfLryfM97Wji8l6EK24WnBA8iBUIe3zaq9pNXx+8KYFjwAyYoYiOGv7/PUS23H7wtjn2emU60DSE39IAx/AVvML59//lg1j5i9PT3zbutLsy+MS5luAFAeQr1CXebTd2keMTsejoz2efZ91ToteABSEeoVah4NG0pp8+y7qnVa8ACkUjvoorvNo2FDKWme3WFuXW0nAkC5VA646M71yWRd3T8/vjQfa6o52HdV2bTgAUikcrCFbPPl4npzAZ3GYN8VyLTgAUikbqBFP323svmYzKbqg30ym67a/owWPABp1A2y0KW5Ml7rlre2ap0WPABpCPWKxJ5Pb9NcQLd+PruqYA/RPqcFDyAFQh1JaA72tkrb5wEvsXYcAEAToV6RlPPpbd/fhqO2YG+rtF1b8MaEO8kPANoQ6pWQEijNVeOagj3EvDgteACxEeqVCH00bBfbWtXKgv3dddKCByAJoV6JGEfD+vr04eP3bf9+PBwZDdvdQryGUjomAMokfiBFGBKqxPFw1LrnW8M+9rYWvM+8Oi14ADGJHkQRRq6tbJv2ncKmIdi3hTIteABSiB5AUQ7XsL44OllJPqktRCjTggcQy/9yXwDikzCf7uP29OxmMpuKrWrny8W7rsP54fGN6/XePz9ejocj55Y9AH8+N88+z3KQjlCvgIRw3DWfvo1PSKa2LZRtC97lmtf/DaEOdGQDe75cDJpFS4gxw3YKmwt7x8PRSkvwE+qF0zKfvu2/vz09G+x6oEouIUJ5W7UP4D0b4HY9S+ybffv1m9/n/vnx3583pxIlhj2hjui6Ln6zW91yn4S3DS14II5miEvs1jXHIxv2doyTEPKEeuEkBqKPi6OT1e+/f5za2im1teBdrbfH3eQeAAAJ5stFsko8BjvOSgh5Qr1gUlZZXxyd9GqhS5xfb2vBu86rA7XTHuS7tIV837HQBaFeMKlHw3b4GiLb8LTgAX82zEsL8l2aIR874Al1RNV2NKwvqW34TbTggffmy4WZLxcDaTfmOcQOeEK9YKV9gKS14dsqbZ8WPNU6SlZ6Vb6tE+nzd90M+BBz8IR6oUqZT2+S2obfJO3mA0hNe5g396rbMzY8wvbNTXpzLLZTor///vm2+drcPz++3D8/mvFwdPXpw8fvXcfOwWolbhswArh7esje6hoPR1e3p2fBq9DJbCpmsPj15evWdQuff/5w/mDdnp4NaMGjBBrD3IZojpXqdlrCmO1B36U9T6VeKAlHw4aaT98kqRJuO0SGFjxqI6GQcJEzxLdcS/O0zZv1//4dGmZfz99//zhX71TqhfKpFGOJWYFKqdbPD48Ptn3Q5suF8TkNr63iB6Tzfa/nMB6Ors4Pj1UuSt0M+LYxx6JSL5DWo2F9SKnW1x2RbYvlvL4Ox8ZCG+mtdhvk61/nvpzObIBfHJ0MbLt+MptetlXuhDqiiP1cdJ8HqMS06xx4WvAoleRWu+aqfJ9Gu/5Nm96Y1/DneeoFkvphC83ehUvlc325b04AF+tW+6W0MWYd5Ae/vnwd3J6eFRno21wcnaxsmNuAp1JHFCmOQxRUrQdp79GCh2QSq/OSq3IfzWCnUi+MlPn0VCRX6/amw/W/t+dgA5JIrM7X22WrqspdXBydrAh1BBd7Pr3JNzhj2HXGvm8LXsqhQYAxryvbc3fDLMJ8P9rvhZF0N51K7pXwbSvgAc2ktdv3beXCf6jUCyKlykv9wZN8x04LHhpJarfbBXAEuhtCvSClPGpV0/c1Zv/KdVrw0MLOn0tot9tWO2Huh/Z7QUo+Gnaf3C34XXw7CexZRw6SToaj1d4dlXpBJIRa4xzj1N83d7W+8899rk3CzxF1uXt6GEgIdKrz/gj1QkjZyiZ5fjsn3613tOCRipQFceeHxwesau+PUEcwKbeytXx/sS3rLi34SJcC/CMh0KnOwyLUC5H7gylB7hb8PrTgIYmEQKc6D49QRzC55tO1oAUPKSRsWaM6j4NQLwDz6a+kt+DZs47ccm9ZGw9HV7++fB1IGC9KRKgjiNzz6VaugSLGGQHsWUdouQPdtttzff8aiBiI0U/uNpo0kufVfTsJVOsIRUKg026Pj1BXTkolx4fVjfTFfChT7kBn/jwdQl25mo+GbSN5Xt0Yjo1FWndPD4Ncgc78eXqEunI1Hw3bprQBhBY8usq5bY358zwIdeXYz7ydtO5Bk28Lnp8xusgd6LTb8yDUFZPSluXD648964iJQK8Xoa4Y8+ntpE0JbOLYWMRCoNeNUFeM+fR2Gk63823BU61jn5yBzgp3GQh1xSTMtWoIzxS6vA7sWUdI8+Ui25kVt6dnrHAXglBXiqNhd5N6XU3sWUdIuW76CHRZCHV0JuVoWM18pi9owaNNrr3oBLo8BwwSOnE07H4aqmDftj0teGzKNY9OoMtEpYXOWBTzquvgxp519EGgY9OBhG1R8CNlPh1hsGcdXeRaGEegy3YgYVsU9GE+/VXfNj971tHFZDZN3ikj0OU7kLrPGO2YT3ej6b3NnnX4yNGtI9B1oFJXRspgznz6qxA3D+xZh6sc8+gEuh4Hnz58/C4lKLCfhDUQGlaVa8OCObjIEejnh8cHBLoeB+PhaCUhKOBGQmdFS1tb22l3vq8rN+P1yRHodOV0OTBGRlDAjYQKTVtYxhbq9WDPOnaZzKZJf94Euk4H4+FIRFBgPylb2bS04lJ1oEK9Hl1a8FTrdUh9YhyBrteBMf/NkTI4wAVb2eJiwRw2pd6PTqDrxgCtCFvZ5Am9aJAFc9iUcj86ga7fgTH/VQfc8cMF8+lvxVg0yII5WCmn3MbD0RWBrh+VuhLMp9eDBXMwJv32tdvTM6+pH8hk59RZdIO9mE9/L0Zlw4I5GJN2uu329ExE0YD+/g3S4+Hoijt+uZhP96d5qyYL5uqWsjPH4TJlofJSQEoVxnzbWzE7FyyYq1fKtjsL48rzb1A6Pzy+oY0nk4QT/zgaVj4+u2Ug0NFHs/1ujKGNJ5GENrKWo2GbYlevsXcC0IKvT6q2O4FerjftQ6oxmWityhR7HpIFc3VJ1XZn61rZ3oQ6LXh5pPwstA0CsV+3VDfAVOv1SNV2Z+ta2bYu9GFgkIP59G5iv26ppiNYMFeHlG33FN8H+Wy23+058AwMQjCfLlPKzoXv6y/loCK4SdV2Zx69Dq13bVLavrWTcIOl8WjYmDdDqTsXvgOxhBtBuCPQEdK7ULdzeLTg85NScWk8mCLmzVCOzgUL5sqU4jPOwri6vAt1O4AzMMAY5uC2yTFAsmCuPKna7iyMq8vWAdtWBQwMeXE0bDcxq59cNzlsbytPokAX0e1DOlsHKFsVMDCAtp0cVOvlSNF250z3OrVV6lTrmUmZT9co5kKxnDc5vgO0hEWWeC9F252FcfVqbSXaxUBU6/XSOp8eK8wkvB6+K+/57MoTe3cCC+Pq1jpINd8UVOvpMZ/eTekdDlrwut09PQxid1BYGFe3nZWHrQpo46Ulpbribv8tCa8HC+Z0S9F2j/n1Id/ON0CzKpjMptzxJ8LRsN3FGjQlDZZU6zrF7iIxjw5j9lfqb6p17vjTkHAimMajYWO+PyUNllTr+sReHMc8Oqy91UezKuCOPw0J0x0aj4aN1eGQVKVbVOu6xG67M48Oa+9g1dxGM18urktfiJSblNdX4/7WWAOnxAqIp7fpkaLtHvPrQxenN0PzTcOq7PJpHCRiDZySXwue3qZDzDGTeXRschqwNt80LJqLh5smWSQPmL7XxnsrvdhHFkt+fyIP5yqkWbGw8KZsGufTYwSW5Crd4jAauWIvjiPQsY3zoHVxdLJqDiAsvAlPSntU23x6rNdNw6DJgjm5YrfdY31t6Ob1xmgOICyaK5PGwaLWKt0YtrdJRdsduXgNXJsDyP3z4wsDRDjMefqruUq3qNbliXkIkqb3JtLzrkY2B5DJbMobLAApN0faBoyaq3SLal2WmFW6ts8n0vMevLYNIKyG74+jYf3FGDy1VkJU6zLEXByn7WYTeXR6k2wOIMyv98fRsP5iDJ4aA90YqvXSab3ZRHqdQn08HL27a2R+vR9O/PITq0oP/TVTolrPK1aVTqDDR+dBbHOLmzEMEl1J6XJoGjio0t+jWs+rpmOKIVevymRbG575dZ00zadTpbejWs+jxmOKIVOvN8y2Njzz6/6YT3cXo8VZUnuTB73kQdsdUvS+C2xpw78Q7O4kDKxajoYNPXiW+Bxq32qdz2o/MV6/Et+XSCNIa2fbIEKwu5HyGmk4GjbGa1Xic6h9q3UOPeou1uK4Et+XSCNIqG9rwxtDsGuhYd4uVts95NeThGo9DQ4/gjTB3jzb2vDGEOz7UCW5YR7dj2/nhfehPw4/gkRB7wjbWkbsYd9OymsifRAJPXjWMl/pW/Fx8+2H9R2QKHib5/b0bOvAMJlNV1JCTAoJR8NKF6PtXst8ZVv3rA3VurtIVXoV70vEFTzUx8PRzmCnGpBF8vwd8+j9MbceXqz3pYbFqpAvygDXtnDOGObYm6iM2s2XC+bRA2AlfHihz5Wo8X2JeKJVLRdHJyuCvZ2UqQipg0noR/rWPHD6VuucCtnu7ulhEPJcCebREVrUViTB3k7CfLrUo2FDh0rNgW4MZ8KHFKF7xDw6goo+v7hrsU7Nwc7RsNuFroRqD3SLM+H7Cz1WMY+OGJIsGro9PbvZFew1tvs4Gva9yWx6GbISItBfUa33E3qNB+9NxJJsJfCuYJ8vF9eff/6oZmW8lL+npCphMpteUqHHRbXeXcjpMubREVPS7T27gt2YutvxqUna2kWgp0G13k3oLWzMoyOm5AM7wc62oSYCPS2qdX+h2+6SOmQoT5Zq7fb07GZXpXj//PhSUzs+h9zz6fPlwnz++WNFoKe16wyJbWqv1kOOQbw/kUK2Fuyu7W5WiVW7lL9Pzmrh7ulhwD70fHxfp1qr9ZBtd+bRkUrWeVXXYJ/MppdSwrCL+XJh5suFmcymlxK2so2Ho6tc1Veks9wHDJh+2o5y3ma+XFxr/vx1FfKzyjw6UhmsVvnHQteBXnI1ZkNyvlwM7GAgYduai/FwdGX3rI+Ho1WMKn69JSjo/Pl4OLo6Pzy+YY6yG9/1DLenZ4NaXuuQN5+Sxy2UR0SoG+P3Icr5IdEc3r5Chf26SxH05zUejq5qedpaLL4/l5pe888/fwR5vxLoSE1MqFs+VXusqnJTM8ijfzMFfF73WE+0YqAMg2r9vVDv2ZpugiCHuFA3Rk/VjnYxqnNj6giVlKjW3wp5E/rry1eKACQnMtSN8f9wEe4yxJg7N6b8MMmJz9or2u7QTmyoW77tQT5M+cRotRvDzzQF2vDh3r+8X5GT+FA3ptuHjQ9WOjGrc1a3p1F7G55ARylUhLpFuMsSK8yN4eeWQ81t+BBt99JudKCTqlA3pvsdtT3kppRBKKeYYU51nleNbfhQVToL4yCBulC3+nwQS6owUiLMy1dbGz5UoJdwc4MyqA11Y/77QP7+++db15Chet8vZpBb3GTJUlMbPkTbXfPfH+VRHepWiLvtlIfZSLc+q77XDZMLqnO5amjDh3jsL4EOaYoIdSvkClZj6qrg7al5satyYwhzDUpvw4cqBGoaI6BDUaFuhX5k4qcPH7+X+OG1rfX1r6OfX0+Y6+L7OdIS7CHGBy1/V9SnyFC3Yp07bky8p5nFlLIabyLM9Srt8KdQxxez0h1SFR3qVt8FdftIDPpmgK9/n/xJcoS5fl1CUPL8eoh5dMl/P6CKULfsArAYR5luGg9HV8YY03x06fqfQb6+De31r/89Bnb9+2yPgiXIy1NKsBPoqEFVod509/QwMMaYFAG/j70B2Efyc9sJ87J1mcqSFIAsjEMtqg31plgPIikdQV4X30pXymIyAh01IdQbUu3P1swG+frXuS8HiWkLdgIdtSHUd5DUos+JihxWl/n1XMFOoKNGhLqjmgLezvET5NhGQ7AT6KgVod6RbdUbozvom6v0JW3Jg2xdQzPF4jkCHTUj1AOy1bzdXiZtXp4AR0h9HoMcIzBDPXyIQIdmhHoCzaremHih39waZ4O78WchvxVgjJET7KFOiiPQoR2hLkjzQJnGvxs0w7mJoIYEfdrdfUM05KOBJe2rB7oi1AH01nce2zfcQ4a5MQQ6ykGoAwgi1AI1Y94eq9zsYIV+lgHbNVEaQh1AMJpOZ2T+HCU6yH0BAMpxcXSystW2ZAQ6SkWlDiC40HPeodBuR+kIdQDRSGrHU52jBv/LfQEAyrUO0YOcwU51jppQqQNIInXVTpijRoQ6gKRShDutdtSKUAeQnD06OWS4U5kDxvwfvJc/vAsMitEAAAAASUVORK5CYII=" alt="AMSA">
+      <span class="brand-text" data-i18n="brandName">AMSA MARKETING &amp; PR<small data-i18n="brandSub">Agency</small></span>
+    </a>
+    <button class="menu-toggle" onclick="document.querySelector('nav.main-nav').classList.toggle('open'); document.querySelector('.header-ctas').classList.toggle('open');">☰</button>
+    <nav class="main-nav">
+      <a href="index.html" data-i18n="navHome">Home</a>
+      <a href="about.html" data-i18n="navAbout">About</a>
+      <a href="services.html" data-i18n="navServices">Services</a>
+      <a href="portfolio.html" class="active" data-i18n="navPortfolio">Portfolio</a>
+      <a href="contact.html" data-i18n="navContact">Contact</a>
+    </nav>
+    <div class="header-ctas">
+      <div class="lang-toggle">
+        <button data-lang="en" class="active">EN</button>
+        <button data-lang="ar">AR</button>
+      </div>
+      <a class="btn btn-outline" href="creator_portal.html" data-i18n="ctaCreatorLogin">Creator Login</a>
+      <a class="btn btn-gold" href="influencer_registration_form.html" data-i18n="ctaRegisterCreator">Register as Creator</a>
+    </div>
+  </div>
+</header>
+
+<section style="padding-bottom:10px;">
+  <div class="wrap">
+    <span class="eyebrow" data-i18n="pfEyebrow">Portfolio &amp; Clients</span>
+    <h1 style="font-size:clamp(30px,5vw,46px); margin-top:12px; max-width:760px; line-height:1.1;" data-i18n="pfTitle">
+      Everything you need to know about working with AMSA — in one page.
+    </h1>
+    <p style="color:var(--ink-soft); font-size:15.5px; margin-top:16px; max-width:640px; line-height:1.7;" data-i18n="pfIntro">
+      This page is built to stand on its own — share it directly with a prospective client or partner as a
+      complete overview of who we are, how we work, and what we've delivered.
+    </p>
+    <p style="margin-top:10px;">
+      <span class="placeholder-badge" data-i18n="pfPlaceholder">Placeholder — replace stats, case studies, and testimonials with real ones</span>
+    </p>
+  </div>
+</section>
+
+<section class="tight">
+  <div class="wrap grid-4">
+    <div class="stat"><div class="num" data-i18n="stat1Num">2000+</div><div class="lbl" data-i18n="stat1Lbl">Registered Creators</div></div>
+    <div class="stat"><div class="num" data-i18n="stat2Num">40+</div><div class="lbl" data-i18n="stat2Lbl">Brand Campaigns</div></div>
+    <div class="stat"><div class="num" data-i18n="stat3Num">13</div><div class="lbl" data-i18n="stat3Lbl">Regions Covered</div></div>
+    <div class="stat"><div class="num" data-i18n="stat4Num">4</div><div class="lbl" data-i18n="stat4Lbl">Platforms Managed</div></div>
+  </div>
+</section>
+
+<section style="background:var(--mist);">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow" data-i18n="howEyebrow">How We Work</span>
+      <h2 style="font-size:28px;" data-i18n="howTitle">A simple four-step process</h2>
+    </div>
+    <div class="grid-2" style="gap:28px 40px;">
+      <div class="process-step">
+        <div class="process-num">1</div>
+        <div>
+          <h3 style="font-size:16px;" data-i18n="how1Title">Brief &amp; Strategy</h3>
+          <p style="color:var(--ink-soft); font-size:13.5px; margin-top:6px; line-height:1.6;" data-i18n="how1Desc">We learn your goals, audience, and budget, then map out a creator strategy to match.</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="process-num">2</div>
+        <div>
+          <h3 style="font-size:16px;" data-i18n="how2Title">Casting &amp; Approval</h3>
+          <p style="color:var(--ink-soft); font-size:13.5px; margin-top:6px; line-height:1.6;" data-i18n="how2Desc">We shortlist creators from our network and get your sign-off before anything moves forward.</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="process-num">3</div>
+        <div>
+          <h3 style="font-size:16px;" data-i18n="how3Title">Content &amp; Delivery</h3>
+          <p style="color:var(--ink-soft); font-size:13.5px; margin-top:6px; line-height:1.6;" data-i18n="how3Desc">Creators produce content, we review it against your brief, and it goes live on schedule.</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="process-num">4</div>
+        <div>
+          <h3 style="font-size:16px;" data-i18n="how4Title">Report &amp; Settle</h3>
+          <p style="color:var(--ink-soft); font-size:13.5px; margin-top:6px; line-height:1.6;" data-i18n="how4Desc">You get a performance report and one clean invoice; creators get paid on schedule.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="tight">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow" data-i18n="indEyebrow">Client Industries</span>
+      <h2 style="font-size:24px;" data-i18n="indTitle">Brands we typically work with</h2>
+    </div>
+    <div class="grid-4">
+      <div class="card" style="text-align:center; padding:22px;"><div class="eyebrow" data-i18n="ind1">Retail</div></div>
+      <div class="card" style="text-align:center; padding:22px;"><div class="eyebrow" data-i18n="ind2">F&amp;B</div></div>
+      <div class="card" style="text-align:center; padding:22px;"><div class="eyebrow" data-i18n="ind3">Telecom</div></div>
+      <div class="card" style="text-align:center; padding:22px;"><div class="eyebrow" data-i18n="ind4">Beauty</div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow" data-i18n="csEyebrow">Case Studies</span>
+      <h2 style="font-size:26px;" data-i18n="csTitle">Recent campaigns</h2>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="placeholder-badge" data-i18n="csSample">Sample case study</div>
+        <div class="eyebrow" data-i18n="cs1Eyebrow">Retail · Riyadh</div>
+        <h3 style="font-size:17px; margin-top:8px;" data-i18n="cs1Title">Ramadan Collection Launch</h3>
+        <p style="color:var(--ink-soft); font-size:13.5px; margin-top:8px; line-height:1.6;" data-i18n="cs1Desc">12 creators across Instagram and TikTok, reaching a combined audience of 1.4M during launch week.</p>
+      </div>
+      <div class="card">
+        <div class="placeholder-badge" data-i18n="csSample">Sample case study</div>
+        <div class="eyebrow" data-i18n="cs2Eyebrow">F&amp;B · Jeddah</div>
+        <h3 style="font-size:17px; margin-top:8px;" data-i18n="cs2Title">New Menu Rollout</h3>
+        <p style="color:var(--ink-soft); font-size:13.5px; margin-top:8px; line-height:1.6;" data-i18n="cs2Desc">8 food creators produced launch-day content driving a 30% spike in weekend foot traffic.</p>
+      </div>
+      <div class="card">
+        <div class="placeholder-badge" data-i18n="csSample">Sample case study</div>
+        <div class="eyebrow" data-i18n="cs3Eyebrow">Beauty · Eastern Province</div>
+        <h3 style="font-size:17px; margin-top:8px;" data-i18n="cs3Title">Product Seeding Campaign</h3>
+        <p style="color:var(--ink-soft); font-size:13.5px; margin-top:8px; line-height:1.6;" data-i18n="cs3Desc">20 beauty creators, unboxing-style content, 92% completion rate on sponsored posts.</p>
+      </div>
+      <div class="card">
+        <div class="placeholder-badge" data-i18n="csSample">Sample case study</div>
+        <div class="eyebrow" data-i18n="cs4Eyebrow">Telecom · Nationwide</div>
+        <h3 style="font-size:17px; margin-top:8px;" data-i18n="cs4Title">5G Awareness Push</h3>
+        <p style="color:var(--ink-soft); font-size:13.5px; margin-top:8px; line-height:1.6;" data-i18n="cs4Desc">15 tech and lifestyle creators, multi-city rollout, over 2M combined impressions in 3 weeks.</p>
+      </div>
+      <div class="card">
+        <div class="placeholder-badge" data-i18n="csSample">Sample case study</div>
+        <div class="eyebrow" data-i18n="cs5Eyebrow">Retail · Dammam</div>
+        <h3 style="font-size:17px; margin-top:8px;" data-i18n="cs5Title">Back-to-School Campaign</h3>
+        <p style="color:var(--ink-soft); font-size:13.5px; margin-top:8px; line-height:1.6;" data-i18n="cs5Desc">10 family and lifestyle creators, seasonal push resulting in a 22% uplift in store visits.</p>
+      </div>
+      <div class="card">
+        <div class="placeholder-badge" data-i18n="csSample">Sample case study</div>
+        <div class="eyebrow" data-i18n="cs6Eyebrow">F&amp;B · Riyadh</div>
+        <h3 style="font-size:17px; margin-top:8px;" data-i18n="cs6Title">Weekend Brunch Series</h3>
+        <p style="color:var(--ink-soft); font-size:13.5px; margin-top:8px; line-height:1.6;" data-i18n="cs6Desc">Ongoing monthly content series with 6 food creators, sustained engagement over 4 months.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--mist);">
+  <div class="wrap">
+    <div class="section-head center">
+      <span class="eyebrow" data-i18n="testiEyebrow">What clients say</span>
+      <h2 style="font-size:26px;" data-i18n="testiTitle">Client feedback</h2>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <p class="testimonial" data-i18n="testi1">“AMSA made our first influencer campaign painless — from casting to reporting, everything was handled and on time.”</p>
+        <p class="testimonial-author" data-i18n="testi1Author">— Marketing Lead, Retail Client</p>
+      </div>
+      <div class="card">
+        <p class="testimonial" data-i18n="testi2">“Clear communication and fair payment terms. Our creators actually enjoyed working on this campaign.”</p>
+        <p class="testimonial-author" data-i18n="testi2Author">— Brand Manager, F&amp;B Client</p>
+      </div>
+    </div>
+    <p style="text-align:center; margin-top:16px;">
+      <span class="placeholder-badge" data-i18n="testiPlaceholder">Placeholder quotes — replace with real client testimonials</span>
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="cta-band">
+      <span class="eyebrow" style="color:rgba(255,255,255,0.8);" data-i18n="pfCtaEyebrow">Your brand could be next</span>
+      <h2 data-i18n="pfCtaTitle">Let's plan your campaign.</h2>
+      <p data-i18n="pfCtaDesc">Get in touch and we'll put together a plan built around your goals and budget.</p>
+      <div class="btn-row">
+        <a class="btn btn-gold" href="contact.html" data-i18n="pfCtaBtn">Get in touch</a>
+        <a class="btn btn-outline" href="services.html" style="border-color:rgba(255,255,255,0.4); color:#fff;" data-i18n="pfCtaBtn2">See our services</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="foot-brand">
+          <img src="data:image/png;base64,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" alt="AMSA">
+          <span data-i18n="footBrandName">AMSA Marketing &amp; PR</span>
+        </div>
+        <p class="tagline" data-i18n="footTagline">Connecting brands with the right creators across Saudi Arabia — influencer marketing, content, and campaign management.</p>
+      </div>
+      <div>
+        <h4 data-i18n="footCompanyHeading">Company</h4>
+        <a href="about.html" data-i18n="navAbout">About Us</a>
+        <a href="services.html" data-i18n="navServices">Services</a>
+        <a href="portfolio.html" data-i18n="navPortfolio">Portfolio</a>
+        <a href="contact.html" data-i18n="navContact">Contact</a>
+      </div>
+      <div>
+        <h4 data-i18n="footCreatorsHeading">For Creators</h4>
+        <a href="influencer_registration_form.html" data-i18n="ctaRegisterCreator">Register as Creator</a>
+        <a href="creator_portal.html" data-i18n="ctaCreatorLogin">Creator Login</a>
+      </div>
+      <div>
+        <h4 data-i18n="footContactHeading">Contact</h4>
+        <a href="mailto:info@amsamarketing.com" data-i18n="contactEmail">info@amsamarketing.com</a>
+        <a href="https://www.amsamarketing.com" data-i18n="contactWebsite">www.amsamarketing.com</a>
+        <a href="#" data-i18n="contactAddress">Saudi Arabia</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span data-i18n="footCopyright">© 2026 AMSA Marketing &amp; PR Agency. All rights reserved.</span>
+      <span data-i18n="footMadeFor">Made for creators and brands across the Kingdom.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyqGQr5yPgaYvhLiYzdqwGK4puzpEHJ4gAqy9cQbT0k0iWQF9KB-gHfJzZ8xRq1OwmD/exec";
+const TRANSLATIONS = {"en": {"brandName": "AMSA MARKETING &amp; PR", "brandSub": "Agency", "navHome": "Home", "navAbout": "About", "navServices": "Services", "navPortfolio": "Portfolio", "navContact": "Contact", "ctaCreatorLogin": "Creator Login", "ctaRegisterCreator": "Register as Creator", "footBrandName": "AMSA Marketing &amp; PR", "footTagline": "Connecting brands with the right creators across Saudi Arabia — influencer marketing, content, and campaign management.", "footCompanyHeading": "Company", "footCreatorsHeading": "For Creators", "footContactHeading": "Contact", "footLocation": "Saudi Arabia", "contactEmail": "info@amsamarketing.com", "contactWebsite": "www.amsamarketing.com", "contactAddress": "Saudi Arabia", "footCopyright": "© 2026 AMSA Marketing &amp; PR Agency. All rights reserved.", "footMadeFor": "Made for creators and brands across the Kingdom.", "pfEyebrow": "Portfolio &amp; Clients", "pfTitle": "Everything you need to know about working with AMSA — in one page.", "pfIntro": "This page is built to stand on its own — share it directly with a prospective client or partner as a complete overview of who we are, how we work, and what we've delivered.", "pfPlaceholder": "Placeholder — replace stats, case studies, and testimonials with real ones", "stat1Num": "2000+", "stat2Num": "40+", "stat3Num": "13", "stat4Num": "4", "stat1Lbl": "Registered Creators", "stat2Lbl": "Brand Campaigns", "stat3Lbl": "Regions Covered", "stat4Lbl": "Platforms Managed", "howEyebrow": "How We Work", "howTitle": "A simple four-step process", "how1Title": "Brief &amp; Strategy", "how1Desc": "We learn your goals, audience, and budget, then map out a creator strategy to match.", "how2Title": "Casting &amp; Approval", "how2Desc": "We shortlist creators from our network and get your sign-off before anything moves forward.", "how3Title": "Content &amp; Delivery", "how3Desc": "Creators produce content, we review it against your brief, and it goes live on schedule.", "how4Title": "Report &amp; Settle", "how4Desc": "You get a performance report and one clean invoice; creators get paid on schedule.", "indEyebrow": "Client Industries", "indTitle": "Brands we typically work with", "ind1": "Retail", "ind2": "F&amp;B", "ind3": "Telecom", "ind4": "Beauty", "csEyebrow": "Case Studies", "csTitle": "Recent campaigns", "csSample": "Sample case study", "cs1Eyebrow": "Retail · Riyadh", "cs1Title": "Ramadan Collection Launch", "cs1Desc": "12 creators across Instagram and TikTok, reaching a combined audience of 1.4M during launch week.", "cs2Eyebrow": "F&amp;B · Jeddah", "cs2Title": "New Menu Rollout", "cs2Desc": "8 food creators produced launch-day content driving a 30% spike in weekend foot traffic.", "cs3Eyebrow": "Beauty · Eastern Province", "cs3Title": "Product Seeding Campaign", "cs3Desc": "20 beauty creators, unboxing-style content, 92% completion rate on sponsored posts.", "cs4Eyebrow": "Telecom · Nationwide", "cs4Title": "5G Awareness Push", "cs4Desc": "15 tech and lifestyle creators, multi-city rollout, over 2M combined impressions in 3 weeks.", "cs5Eyebrow": "Retail · Dammam", "cs5Title": "Back-to-School Campaign", "cs5Desc": "10 family and lifestyle creators, seasonal push resulting in a 22% uplift in store visits.", "cs6Eyebrow": "F&amp;B · Riyadh", "cs6Title": "Weekend Brunch Series", "cs6Desc": "Ongoing monthly content series with 6 food creators, sustained engagement over 4 months.", "testiEyebrow": "What clients say", "testiTitle": "Client feedback", "testi1": "“AMSA made our first influencer campaign painless — from casting to reporting, everything was handled and on time.”", "testi1Author": "— Marketing Lead, Retail Client", "testi2": "“Clear communication and fair payment terms. Our creators actually enjoyed working on this campaign.”", "testi2Author": "— Brand Manager, F&amp;B Client", "testiPlaceholder": "Placeholder quotes — replace with real client testimonials", "pfCtaEyebrow": "Your brand could be next", "pfCtaTitle": "Let's plan your campaign.", "pfCtaDesc": "Get in touch and we'll put together a plan built around your goals and budget.", "pfCtaBtn": "Get in touch", "pfCtaBtn2": "See our services"}, "ar": {"brandName": "أمسا للتسويق والعلاقات العامة", "brandSub": "وكالة", "navHome": "الرئيسية", "navAbout": "من نحن", "navServices": "خدماتنا", "navPortfolio": "أعمالنا", "navContact": "تواصل معنا", "ctaCreatorLogin": "دخول المؤثرين", "ctaRegisterCreator": "سجّل كمؤثر", "footBrandName": "أمسا للتسويق والعلاقات العامة", "footTagline": "نربط العلامات التجارية بالمؤثرين المناسبين في جميع أنحاء المملكة العربية السعودية — تسويق المؤثرين، المحتوى، وإدارة الحملات.", "footCompanyHeading": "الشركة", "footCreatorsHeading": "للمؤثرين", "footContactHeading": "تواصل معنا", "footLocation": "المملكة العربية السعودية", "contactEmail": "info@amsamarketing.com", "contactWebsite": "www.amsamarketing.com", "contactAddress": "المملكة العربية السعودية", "footCopyright": "© 2026 وكالة أمسا للتسويق والعلاقات العامة. جميع الحقوق محفوظة.", "footMadeFor": "صُنعت للمبدعين والعلامات التجارية في جميع أنحاء المملكة.", "pfEyebrow": "أعمالنا وعملاؤنا", "pfTitle": "كل ما تحتاج معرفته عن العمل مع أمسا — في صفحة واحدة.", "pfIntro": "صُممت هذه الصفحة لتكون كافية بذاتها — شاركها مباشرة مع عميل أو شريك محتمل كنظرة شاملة عمّن نحن، وكيف نعمل، وما حققناه.", "pfPlaceholder": "نص مؤقت — استبدل الإحصائيات ودراسات الحالة والشهادات ببيانات حقيقية", "stat1Num": "2000+", "stat2Num": "+40", "stat3Num": "13", "stat4Num": "4", "stat1Lbl": "مؤثر مسجّل", "stat2Lbl": "حملة تجارية", "stat3Lbl": "منطقة مغطاة", "stat4Lbl": "منصة مُدارة", "howEyebrow": "كيف نعمل", "howTitle": "عملية بسيطة من أربع خطوات", "how1Title": "الإحاطة والاستراتيجية", "how1Desc": "نتعرّف على أهدافك وجمهورك وميزانيتك، ثم نضع استراتيجية مؤثرين مناسبة.", "how2Title": "الاختيار والاعتماد", "how2Desc": "نُعدّ قائمة مختصرة من شبكتنا ونحصل على موافقتك قبل المضي قدماً.", "how3Title": "المحتوى والتسليم", "how3Desc": "ينتج المؤثرون المحتوى، نراجعه مقابل طلبك، ثم يُنشر في الموعد المحدد.", "how4Title": "التقرير والتسوية", "how4Desc": "تحصل على تقرير أداء وفاتورة واحدة واضحة؛ ويحصل المؤثرون على مستحقاتهم في موعدها.", "indEyebrow": "قطاعات عملائنا", "indTitle": "العلامات التجارية التي نعمل معها عادة", "ind1": "التجزئة", "ind2": "المطاعم والمقاهي", "ind3": "الاتصالات", "ind4": "الجمال", "csEyebrow": "دراسات حالة", "csTitle": "حملات حديثة", "csSample": "دراسة حالة توضيحية", "cs1Eyebrow": "تجزئة · الرياض", "cs1Title": "إطلاق مجموعة رمضان", "cs1Desc": "12 مؤثراً عبر إنستغرام وتيك توك، بوصول جماهيري إجمالي 1.4 مليون خلال أسبوع الإطلاق.", "cs2Eyebrow": "مطاعم · جدة", "cs2Title": "إطلاق قائمة طعام جديدة", "cs2Desc": "8 مؤثرين في مجال الطعام أنتجوا محتوى يوم الإطلاق، ما رفع الإقبال في عطلة نهاية الأسبوع بنسبة 30٪.", "cs3Eyebrow": "جمال · المنطقة الشرقية", "cs3Title": "حملة تجربة المنتج", "cs3Desc": "20 مؤثرة جمال، محتوى بأسلوب فتح الصندوق، بمعدل إنجاز 92٪ للمنشورات الممولة.", "cs4Eyebrow": "اتصالات · على مستوى المملكة", "cs4Title": "حملة توعية بشبكة 5G", "cs4Desc": "15 مؤثراً تقنياً ومنمط حياة، انتشار في عدة مدن، أكثر من 2 مليون مشاهدة إجمالية خلال 3 أسابيع.", "cs5Eyebrow": "تجزئة · الدمام", "cs5Title": "حملة العودة إلى المدارس", "cs5Desc": "10 مؤثرين عائليين ومنمط حياة، دفعة موسمية أدت لارتفاع زيارات المتاجر بنسبة 22٪.", "cs6Eyebrow": "مطاعم · الرياض", "cs6Title": "سلسلة إفطار نهاية الأسبوع", "cs6Desc": "سلسلة محتوى شهرية مستمرة مع 6 مؤثرين في الطعام، بتفاعل مستدام على مدى 4 أشهر.", "testiEyebrow": "ماذا يقول عملاؤنا", "testiTitle": "آراء العملاء", "testi1": "«جعلت أمسا حملتنا الأولى مع المؤثرين سهلة تماماً — من الاختيار إلى التقرير، كل شيء تمّ في وقته.»", "testi1Author": "— مدير التسويق، عميل تجزئة", "testi2": "«تواصل واضح وشروط دفع عادلة. استمتع المؤثرون فعلاً بالعمل على هذه الحملة.»", "testi2Author": "— مدير العلامة التجارية، عميل مطاعم", "testiPlaceholder": "اقتباسات مؤقتة — استبدلها بشهادات عملاء حقيقية", "pfCtaEyebrow": "علامتك التجارية قد تكون التالية", "pfCtaTitle": "لنخطط لحملتك.", "pfCtaDesc": "تواصل معنا وسنضع خطة مبنية على أهدافك وميزانيتك.", "pfCtaBtn": "تواصل معنا", "pfCtaBtn2": "شاهد خدماتنا"}};
+let currentLang = 'en';
+
+function applyLanguage(lang){
+  currentLang = lang;
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  const dict = TRANSLATIONS[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if(dict[key] !== undefined) el.innerHTML = dict[key];
+  });
+  document.querySelectorAll('.lang-toggle button').forEach(b => {
+    b.classList.toggle('active', b.dataset.lang === lang);
+  });
+}
+
+document.querySelectorAll('.lang-toggle').forEach(t => {
+  t.addEventListener('click', e => {
+    const btn = e.target.closest('button[data-lang]');
+    if(btn) applyLanguage(btn.dataset.lang);
+  });
+});
+
+applyLanguage('en');
+
+// Pull any admin-edited content (stats, testimonials, case studies, contact info)
+// and merge it on top of the defaults above, then re-render in the current language.
+fetch(`${WEB_APP_URL}?action=website&_=${Date.now()}`, { cache: 'no-store' })
+  .then(r => r.json())
+  .then(res => {
+    if(res.result === 'success' && res.content){
+      Object.keys(res.content).forEach(key => {
+        const entry = res.content[key];
+        if(entry.en) TRANSLATIONS.en[key] = entry.en;
+        if(entry.ar) TRANSLATIONS.ar[key] = entry.ar;
+      });
+      applyLanguage(currentLang);
+    }
+  })
+  .catch(() => {}); // fall back silently to the built-in defaults if this fails
+</script>
+
+</body>
+</html>

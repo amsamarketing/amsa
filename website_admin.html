@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Website Content Admin — AMSA</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal-900:#1F433D; --teal-700:#3E8F82; --teal-500:#6FB8AC;
+    --gold:#B8933E; --gold-deep:#8C6C24;
+    --mist:#F2F7F6; --ink:#122420; --ink-soft:#5C7A73;
+    --paper:#FFFFFF; --line:rgba(18,36,32,0.11); --rust:#B54B3A;
+    --radius:16px; --shadow:0 20px 45px -25px rgba(18,50,44,0.35);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--mist); color:var(--ink); font-family:'Cairo',sans-serif; min-height:100vh; -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:900px; margin:0 auto; padding:40px 24px 80px;}
+  .eyebrow{font-family:'Space Grotesk',sans-serif; text-transform:uppercase; letter-spacing:.14em; font-size:11.5px; font-weight:600; color:var(--teal-700);}
+  h1{font-family:'Space Grotesk',sans-serif; text-transform:uppercase; font-size:clamp(22px,4vw,30px); margin:8px 0 24px; font-weight:700; color:var(--ink);}
+  .top-bar{display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:24px; flex-wrap:wrap;}
+  .brand{display:flex; align-items:center; gap:10px;}
+  .brand img{width:34px; height:34px;}
+  .brand span{font-family:'Space Grotesk'; font-weight:700; font-size:13.5px;}
+
+  .key-gate{max-width:420px; margin:80px auto; background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); padding:32px; box-shadow:var(--shadow);}
+  .key-gate input{width:100%; border:1.5px solid var(--line); border-radius:10px; padding:12px 14px; font-family:'Cairo'; font-size:14px; margin:14px 0;}
+  .key-gate button{width:100%; background:var(--ink); color:var(--mist); border:none; border-radius:10px; padding:12px; font-family:'Space Grotesk'; font-weight:600; cursor:pointer;}
+  #keyError{color:var(--rust); font-size:12.5px; display:none; margin-top:8px;}
+
+  .save-bar{
+    position:sticky; top:0; z-index:20; background:rgba(242,247,246,0.95); backdrop-filter:blur(8px);
+    padding:14px 0; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;
+    border-bottom:1px solid var(--line);
+  }
+  button.btn{
+    font-family:'Space Grotesk'; font-weight:600; font-size:13.5px; border-radius:10px;
+    padding:11px 22px; border:none; cursor:pointer; background:var(--ink); color:#fff;
+  }
+  button.btn:hover{background:var(--teal-900);}
+  button.btn:disabled{opacity:.5; cursor:not-allowed;}
+  #saveMsg{font-size:12.5px; font-weight:700; color:var(--teal-700); display:none;}
+
+  .panel{background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); padding:26px; box-shadow:var(--shadow); margin-bottom:22px;}
+  .panel h2{font-size:15px; text-transform:uppercase; letter-spacing:.06em; color:var(--teal-700); margin-bottom:18px;}
+  .field-row{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px;}
+  @media (max-width:640px){ .field-row{grid-template-columns:1fr;} }
+  .field{margin-bottom:14px;}
+  .field label{display:block; font-size:11.5px; font-weight:700; color:var(--ink-soft); margin-bottom:5px; text-transform:uppercase; letter-spacing:.03em;}
+  .field input, .field textarea{
+    width:100%; border:1.5px solid var(--line); border-radius:8px; padding:9px 12px;
+    font-family:'Cairo'; font-size:13.5px; resize:vertical;
+  }
+  .field input:focus, .field textarea:focus{outline:none; border-color:var(--teal-700);}
+  .field.ar-field input, .field.ar-field textarea{direction:rtl; text-align:right;}
+  .case-block{border-top:1px dashed var(--line); padding-top:16px; margin-top:16px;}
+  .case-block:first-child{border-top:none; padding-top:0; margin-top:0;}
+  .case-block h3{font-size:13px; font-weight:700; margin:0 0 10px; color:var(--ink);}
+  .hidden{display:none !important;}
+</style>
+</head>
+<body>
+
+<div class="key-gate" id="keyGate">
+  <span class="eyebrow">AMSA Marketing &amp; PR Agency</span>
+  <h1 style="font-size:18px; margin:8px 0 4px;">Website Content Admin</h1>
+  <p style="color:var(--ink-soft); font-size:13.5px;">Enter the admin key to edit your public website's content.</p>
+  <input type="password" id="keyInput" placeholder="Access key">
+  <button onclick="loadAdmin()">Unlock</button>
+  <p id="keyError">Incorrect key or could not connect. Try again.</p>
+</div>
+
+<div class="wrap hidden" id="adminWrap">
+  <div class="save-bar">
+    <div class="brand">
+      <span class="eyebrow">Website Content Admin</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:14px;">
+      <span id="saveMsg">Saved ✓</span>
+      <button class="btn" id="saveBtn" onclick="saveAll()">Save All Changes</button>
+    </div>
+  </div>
+  <p style="color:var(--ink-soft); font-size:13px; margin-bottom:24px; line-height:1.6;">
+    Changes here update your live website (Home, Portfolio, Contact pages) automatically — no need to touch any code or re-upload files.
+    Fill in both English and Arabic for each field.
+  </p>
+
+  <div class="panel">
+    <h2>Homepage &amp; Portfolio Stats</h2>
+    <div class="field-row">
+      <div class="field"><label>Stat 1 — Registered Creators</label><input id="stat1Num" placeholder="2000+"></div>
+      <div class="field"><label>Stat 2 — Brand Campaigns</label><input id="stat2Num" placeholder="40+"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Stat 3 — Regions Covered</label><input id="stat3Num" placeholder="13"></div>
+      <div class="field"><label>Stat 4 — Platforms Managed</label><input id="stat4Num" placeholder="4"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Testimonials</h2>
+    <div class="case-block">
+      <h3>Testimonial 1</h3>
+      <div class="field"><label>Quote (English)</label><textarea id="testi1_en" rows="2"></textarea></div>
+      <div class="field ar-field"><label>Quote (Arabic)</label><textarea id="testi1_ar" rows="2"></textarea></div>
+      <div class="field-row">
+        <div class="field"><label>Author (English)</label><input id="testi1Author_en"></div>
+        <div class="field ar-field"><label>Author (Arabic)</label><input id="testi1Author_ar"></div>
+      </div>
+    </div>
+    <div class="case-block">
+      <h3>Testimonial 2</h3>
+      <div class="field"><label>Quote (English)</label><textarea id="testi2_en" rows="2"></textarea></div>
+      <div class="field ar-field"><label>Quote (Arabic)</label><textarea id="testi2_ar" rows="2"></textarea></div>
+      <div class="field-row">
+        <div class="field"><label>Author (English)</label><input id="testi2Author_en"></div>
+        <div class="field ar-field"><label>Author (Arabic)</label><input id="testi2Author_ar"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Case Studies (Portfolio Page)</h2>
+    <div id="caseStudiesContainer"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Contact Information</h2>
+    <div class="field-row">
+      <div class="field"><label>Email</label><input id="contactEmail_en" placeholder="info@amsamarketing.com"></div>
+      <div class="field"><label>Website</label><input id="contactWebsite_en" placeholder="www.amsamarketing.com"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Phone</label><input id="contactPhone_en" placeholder="+966 5X XXX XXXX"></div>
+      <div></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Address (English)</label><input id="contactAddress_en" placeholder="Saudi Arabia"></div>
+      <div class="field ar-field"><label>Address (Arabic)</label><input id="contactAddress_ar"></div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:10px;">
+    <button class="btn" onclick="saveAll()">Save All Changes</button>
+  </div>
+</div>
+
+<script>
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyqGQr5yPgaYvhLiYzdqwGK4puzpEHJ4gAqy9cQbT0k0iWQF9KB-gHfJzZ8xRq1OwmD/exec";
+let adminKey = '';
+
+const CASE_STUDY_KEYS = [1,2,3,4,5,6];
+
+function buildCaseStudyFields(){
+  const container = document.getElementById('caseStudiesContainer');
+  container.innerHTML = CASE_STUDY_KEYS.map(n => `
+    <div class="case-block">
+      <h3>Case Study ${n}</h3>
+      <div class="field-row">
+        <div class="field"><label>Category / Location (English)</label><input id="cs${n}Eyebrow_en" placeholder="e.g. Retail · Riyadh"></div>
+        <div class="field ar-field"><label>Category / Location (Arabic)</label><input id="cs${n}Eyebrow_ar"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Title (English)</label><input id="cs${n}Title_en"></div>
+        <div class="field ar-field"><label>Title (Arabic)</label><input id="cs${n}Title_ar"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Description (English)</label><textarea id="cs${n}Desc_en" rows="2"></textarea></div>
+        <div class="field ar-field"><label>Description (Arabic)</label><textarea id="cs${n}Desc_ar" rows="2"></textarea></div>
+      </div>
+    </div>
+  `).join('');
+}
+buildCaseStudyFields();
+
+function loadAdmin(){
+  const key = document.getElementById('keyInput').value.trim();
+  if(!key) return;
+  adminKey = key;
+
+  // Validate the key with a harmless no-op save before unlocking anything.
+  fetch(WEB_APP_URL, {
+    method: 'POST',
+    headers: {'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify({ action: 'saveWebsiteContent', key: adminKey, updates: {} })
+  })
+  .then(r => r.json())
+  .then(res => {
+    if(res.result !== 'success'){
+      document.getElementById('keyError').textContent = 'Incorrect key. Try again.';
+      document.getElementById('keyError').style.display = 'block';
+      return;
+    }
+    return fetch(`${WEB_APP_URL}?action=website&_=${Date.now()}`, { cache: 'no-store' })
+      .then(r => r.json())
+      .then(contentRes => {
+        document.getElementById('keyGate').classList.add('hidden');
+        document.getElementById('adminWrap').classList.remove('hidden');
+        populateFields(contentRes.content || {});
+      });
+  })
+  .catch(() => {
+    document.getElementById('keyError').textContent = 'Could not reach the server. Check your connection.';
+    document.getElementById('keyError').style.display = 'block';
+  });
+}
+
+function setVal(id, val){
+  const el = document.getElementById(id);
+  if(el && val !== undefined) el.value = val;
+}
+
+function populateFields(content){
+  ['stat1Num','stat2Num','stat3Num','stat4Num'].forEach(k => setVal(k, content[k] ? content[k].en : ''));
+
+  ['testi1','testi2'].forEach(k => {
+    setVal(`${k}_en`, content[k] ? content[k].en : '');
+    setVal(`${k}_ar`, content[k] ? content[k].ar : '');
+    setVal(`${k}Author_en`, content[`${k}Author`] ? content[`${k}Author`].en : '');
+    setVal(`${k}Author_ar`, content[`${k}Author`] ? content[`${k}Author`].ar : '');
+  });
+
+  CASE_STUDY_KEYS.forEach(n => {
+    ['Eyebrow','Title','Desc'].forEach(part => {
+      const key = `cs${n}${part}`;
+      setVal(`${key}_en`, content[key] ? content[key].en : '');
+      setVal(`${key}_ar`, content[key] ? content[key].ar : '');
+    });
+  });
+
+  setVal('contactEmail_en', content.contactEmail ? content.contactEmail.en : '');
+  setVal('contactWebsite_en', content.contactWebsite ? content.contactWebsite.en : '');
+  setVal('contactPhone_en', content.contactPhone ? content.contactPhone.en : '');
+  setVal('contactAddress_en', content.contactAddress ? content.contactAddress.en : '');
+  setVal('contactAddress_ar', content.contactAddress ? content.contactAddress.ar : '');
+}
+
+function saveAll(){
+  const updates = {};
+
+  ['stat1Num','stat2Num','stat3Num','stat4Num'].forEach(k => {
+    const v = document.getElementById(k).value;
+    updates[k] = { en: v, ar: v };
+  });
+
+  ['testi1','testi2'].forEach(k => {
+    updates[k] = { en: document.getElementById(`${k}_en`).value, ar: document.getElementById(`${k}_ar`).value };
+    updates[`${k}Author`] = { en: document.getElementById(`${k}Author_en`).value, ar: document.getElementById(`${k}Author_ar`).value };
+  });
+
+  CASE_STUDY_KEYS.forEach(n => {
+    ['Eyebrow','Title','Desc'].forEach(part => {
+      const key = `cs${n}${part}`;
+      updates[key] = { en: document.getElementById(`${key}_en`).value, ar: document.getElementById(`${key}_ar`).value };
+    });
+  });
+
+  const emailVal = document.getElementById('contactEmail_en').value;
+  const websiteVal = document.getElementById('contactWebsite_en').value;
+  const phoneVal = document.getElementById('contactPhone_en').value;
+  updates['contactEmail'] = { en: emailVal, ar: emailVal };
+  updates['contactWebsite'] = { en: websiteVal, ar: websiteVal };
+  updates['contactPhone'] = { en: phoneVal, ar: phoneVal };
+  updates['contactAddress'] = { en: document.getElementById('contactAddress_en').value, ar: document.getElementById('contactAddress_ar').value };
+
+  const btn = document.getElementById('saveBtn');
+  btn.disabled = true;
+  btn.textContent = 'Saving…';
+
+  fetch(WEB_APP_URL, {
+    method: 'POST',
+    headers: {'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify({ action: 'saveWebsiteContent', key: adminKey, updates: updates })
+  })
+  .then(r => r.json())
+  .then(res => {
+    btn.disabled = false;
+    btn.textContent = 'Save All Changes';
+    if(res.result === 'success'){
+      const msg = document.getElementById('saveMsg');
+      msg.style.display = 'inline';
+      setTimeout(() => { msg.style.display = 'none'; }, 2500);
+    } else {
+      alert(res.message || 'Could not save — check your access key.');
+    }
+  })
+  .catch(() => {
+    btn.disabled = false;
+    btn.textContent = 'Save All Changes';
+    alert('Could not reach the server. Check your connection.');
+  });
+}
+
+document.getElementById('keyInput').addEventListener('keydown', (e) => {
+  if(e.key === 'Enter') loadAdmin();
+});
+</script>
+</body>
+</html>
