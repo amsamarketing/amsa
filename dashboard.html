@@ -29,7 +29,12 @@
   button.refresh:hover{border-color:var(--teal-700);}
 
   .stat-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:28px;}
+  .stat-grid-5{grid-template-columns:repeat(5,1fr);}
+  .stat-grid-6{grid-template-columns:repeat(6,1fr);}
+  @media (max-width:1100px){.stat-grid-6{grid-template-columns:repeat(3,1fr);}}
+  @media (max-width:900px){.stat-grid-5{grid-template-columns:repeat(3,1fr);}}
   @media (max-width:800px){.stat-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:600px){.stat-grid-5{grid-template-columns:repeat(2,1fr);} .stat-grid-6{grid-template-columns:repeat(2,1fr);}}
   .stat-card{background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); padding:20px; box-shadow:var(--shadow);}
   .stat-label{font-size:11.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft); font-weight:700;}
   .stat-value{font-family:'Space Grotesk'; font-size:30px; font-weight:700; color:var(--teal-700); margin-top:6px;}
@@ -63,6 +68,23 @@
   .filter-bar button:hover{border-color:var(--teal-700); color:var(--ink);}
   .filter-count{font-size:12px; color:var(--ink-soft); align-self:center; margin-left:auto;}
   table{width:100%; border-collapse:collapse; font-size:13px;}
+  tbody tr{ transition:.1s; }
+  tbody tr:hover{ background:var(--mist); }
+  tbody tr:nth-child(even){ background:rgba(18,36,32,0.015); }
+  tbody tr:nth-child(even):hover{ background:var(--mist); }
+  .cell-primary{ font-weight:700; font-size:13.5px; color:var(--ink); }
+  .cell-secondary{ font-size:11px; color:var(--ink-soft); margin-top:2px; }
+  .cell-money{ font-weight:600; font-variant-numeric:tabular-nums; }
+  .client-chip{
+    display:inline-block; background:rgba(184,147,62,0.12); color:var(--gold-deep);
+    font-weight:700; font-size:11.5px; padding:3px 10px; border-radius:999px;
+  }
+  .pay-progress{ width:100%; background:var(--mist); border-radius:999px; height:6px; overflow:hidden; margin-top:6px; min-width:90px; }
+  .pay-progress-fill{ height:100%; background:var(--teal-700); border-radius:999px; }
+  .pay-progress-fill.paid-full{ background:var(--gold); }
+  .pay-progress-label{ font-size:11px; color:var(--ink-soft); margin-top:4px; }
+  .action-group{ display:flex; gap:5px; flex-wrap:wrap; justify-content:flex-end; }
+  .action-group .details-btn{ padding:5px 10px; font-size:11px; }
   th{
     text-align:left; padding:10px 14px; background:var(--mist); color:var(--ink-soft);
     font-size:11px; text-transform:uppercase; letter-spacing:.05em; font-weight:700;
@@ -104,6 +126,54 @@
   .modal-row:last-child{border-bottom:none;}
   .modal-row .mlabel{color:var(--ink-soft); font-weight:600;}
   .modal-row .mvalue{font-weight:700; text-align:right;}
+
+  .tab-switch{
+    display:flex; gap:8px; margin-bottom:24px; border-bottom:1px solid var(--line); padding-bottom:0;
+  }
+  .tab-switch button{
+    font-family:'Space Grotesk'; font-weight:600; font-size:13.5px; padding:10px 4px;
+    border:none; background:none; color:var(--ink-soft); cursor:pointer;
+    border-bottom:2px solid transparent; margin-bottom:-1px;
+  }
+  .tab-switch button.active{ color:var(--teal-700); border-bottom-color:var(--teal-700); }
+  .tab-switch button:hover{ color:var(--ink); }
+  .modal-field{ margin-bottom:14px; }
+  .modal-field label{ display:block; font-size:12px; font-weight:700; color:var(--ink-soft); margin-bottom:4px; }
+  .modal-field input, .modal-field select{
+    width:100%; border:1.5px solid var(--line); border-radius:8px; padding:9px 12px;
+    font-family:'Cairo'; font-size:13.5px;
+  }
+  .modal-actions{ display:flex; gap:10px; margin-top:18px; }
+  .modal-actions button{
+    flex:1; font-family:'Space Grotesk'; font-weight:600; font-size:13px; border-radius:8px;
+    padding:10px; cursor:pointer;
+  }
+  .modal-btn-save{ background:var(--ink); color:var(--mist); border:none; }
+  .modal-btn-cancel{ background:none; border:1.5px solid var(--line); color:var(--ink); }
+  .delete-x{ background:none; border:none; color:var(--rust); font-size:16px; cursor:pointer; padding:2px 6px; }
+  .assign-row{
+    border:1.5px solid var(--line); border-radius:12px; padding:12px 14px; margin-bottom:8px;
+    transition:.15s; background:var(--paper);
+  }
+  .assign-row.checked{ border-color:var(--teal-700); background:rgba(62,143,130,0.05); }
+  .assign-row-top{ display:flex; align-items:flex-start; gap:10px; }
+  .assign-row input[type="checkbox"]{ width:17px; height:17px; flex-shrink:0; margin-top:2px; cursor:pointer; }
+  .assign-row .aname{ font-weight:700; font-size:14px; }
+  .assign-row .aid{ font-size:11.5px; color:var(--ink-soft); margin-top:1px; }
+  .assign-row .aowned{
+    font-size:10px; color:var(--gold-deep); font-weight:700; background:rgba(184,147,62,0.12);
+    padding:2px 8px; border-radius:999px; white-space:nowrap;
+  }
+  .assign-amounts{
+    display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px; padding-top:12px;
+    border-top:1px solid var(--line);
+  }
+  .assign-amounts.hidden{ display:none; }
+  .assign-amounts .aamt label{ display:block; font-size:10.5px; color:var(--ink-soft); font-weight:700; margin-bottom:4px; text-transform:uppercase; letter-spacing:.04em; }
+  .assign-amounts .aamt input{
+    width:100%; border:1.5px solid var(--line); border-radius:8px; padding:8px 10px; font-family:'Cairo'; font-size:13px;
+  }
+  .assign-amounts .aamt input:focus{ outline:none; border-color:var(--teal-700); }
 
   @media (max-width:700px){
     .wrap{padding:20px 12px 60px;}
@@ -175,6 +245,13 @@
     <button class="refresh" onclick="fetchData()">↻ Refresh</button>
   </div>
 
+  <div class="tab-switch" id="tabSwitch">
+    <button data-tab="registrations" class="active">Registrations</button>
+    <button data-tab="finance">Finance</button>
+    <button data-tab="companies">Companies</button>
+  </div>
+
+  <div id="registrationsTab">
   <div class="stat-grid">
     <div class="stat-card"><div class="stat-label">Total Registrations</div><div class="stat-value" id="statTotal">—</div></div>
     <div class="stat-card"><div class="stat-label">Campaigns Assigned</div><div class="stat-value" id="statAssigned">—</div></div>
@@ -218,6 +295,77 @@
       <div class="empty hidden" id="emptyState">No registrations yet.</div>
     </div>
   </div>
+  </div>
+
+  <div id="financeTab" class="hidden">
+    <div class="stat-grid stat-grid-6">
+      <div class="stat-card"><div class="stat-label">Total Billed</div><div class="stat-value" id="finTotalBilled">—</div></div>
+      <div class="stat-card"><div class="stat-label">Received from Clients</div><div class="stat-value" id="finTotalReceived">—</div></div>
+      <div class="stat-card"><div class="stat-label">Paid to Creators</div><div class="stat-value" id="finTotalPayout">—</div></div>
+      <div class="stat-card"><div class="stat-label">Gross Profit</div><div class="stat-value" id="finGrossProfit">—</div></div>
+      <div class="stat-card"><div class="stat-label">Expenses</div><div class="stat-value" id="finExpenses">—</div></div>
+      <div class="stat-card"><div class="stat-label">Net Profit</div><div class="stat-value" id="finNetProfit">—</div></div>
+    </div>
+
+    <div class="table-card" style="margin-bottom:20px;">
+      <div class="table-header">
+        <h3>Campaigns</h3>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <input type="text" id="financeSearchInput" placeholder="Search reg #, name, campaign..." oninput="renderFinanceTable()" style="width:240px;">
+          <button class="details-btn" onclick="openFinanceModal()">+ Add Campaign</button>
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Client</th><th>Creator</th><th>Campaign</th><th>Client Billing</th><th>Payout Target</th>
+              <th>Payment Progress</th><th>Status</th><th style="text-align:right;">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="financeTableBody"></tbody>
+        </table>
+        <div class="empty hidden" id="financeEmptyState">No campaigns yet — click "+ Add Campaign" to create one.</div>
+      </div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-header">
+        <h3>Expenses</h3>
+        <button class="details-btn" onclick="openExpenseModal()">+ Add Expense</button>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th><th>Notes</th><th></th></tr>
+          </thead>
+          <tbody id="expensesTableBody"></tbody>
+        </table>
+        <div class="empty hidden" id="expensesEmptyState">No expenses logged yet.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="companiesTab" class="hidden">
+    <div class="table-card">
+      <div class="table-header">
+        <h3>Companies (Clients)</h3>
+        <button class="details-btn" onclick="openCompanyModal()">+ Add Company</button>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Company</th><th>Contact Person</th><th>Phone</th><th>Email</th>
+              <th>Industry</th><th>Creators</th><th>Billed</th><th>Received</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="companiesTableBody"></tbody>
+        </table>
+        <div class="empty hidden" id="companiesEmptyState">No companies added yet.</div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="modal-overlay hidden" id="modalOverlay" onclick="if(event.target===this) closeModal()">
@@ -230,10 +378,254 @@
   </div>
 </div>
 
+<div class="modal-overlay hidden" id="financeModalOverlay" onclick="if(event.target===this) closeFinanceModal()">
+  <div class="modal-box" style="max-width:440px;">
+    <div class="modal-header">
+      <h2 id="financeModalTitle">Add Campaign</h2>
+      <button class="modal-close" onclick="closeFinanceModal()">×</button>
+    </div>
+    <div class="modal-field">
+      <label>Creator</label>
+      <input type="text" id="fmCreatorSearch" placeholder="Type a name or registration #..." list="creatorsDatalist" oninput="handleCreatorPick(this.value)">
+      <datalist id="creatorsDatalist"></datalist>
+      <div id="fmCreatorLocked" class="hidden" style="font-size:12px; color:var(--ink-soft); margin-top:5px;"></div>
+    </div>
+    <div class="modal-field">
+      <label>Company</label>
+      <input type="text" id="fmClientName" placeholder="e.g. Almarai, STC, Jarir" list="companiesDatalist">
+      <datalist id="companiesDatalist"></datalist>
+    </div>
+    <div class="modal-field">
+      <label>Campaign Title</label>
+      <input type="text" id="fmCampaignTitle" placeholder="e.g. Ramadan Launch, Summer Collection">
+    </div>
+    <div class="modal-field">
+      <label>Client Billing (SAR)</label>
+      <input type="number" id="fmClientBilling" placeholder="0">
+    </div>
+    <div class="modal-field">
+      <label>Creator Payout Target (SAR)</label>
+      <input type="number" id="fmCreatorPayout" placeholder="0">
+    </div>
+    <div class="modal-field">
+      <label>Status</label>
+      <select id="fmStatus">
+        <option value="Active">Active</option>
+        <option value="Completed">Completed</option>
+        <option value="Cancelled">Cancelled</option>
+      </select>
+    </div>
+    <div class="modal-field">
+      <label>Notes</label>
+      <input type="text" id="fmNotes" placeholder="Optional notes">
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn-cancel" onclick="closeFinanceModal()">Cancel</button>
+      <button class="modal-btn-save" id="fmSaveBtn" onclick="saveFinanceRow()">Save Campaign</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="paymentHistoryOverlay" onclick="if(event.target===this) closePaymentHistoryModal()">
+  <div class="modal-box" style="max-width:480px;">
+    <div class="modal-header">
+      <h2 id="paymentHistoryTitle">Payment History</h2>
+      <button class="modal-close" onclick="closePaymentHistoryModal()">×</button>
+    </div>
+
+    <div id="paymentHistorySummary" style="margin-bottom:16px;"></div>
+
+    <div id="paymentHistoryList" style="margin-bottom:18px;"></div>
+
+    <div class="modal-section-title" style="margin-top:6px;">Add a payment</div>
+    <div class="modal-field">
+      <label>Date</label>
+      <input type="date" id="phDate">
+    </div>
+    <div class="modal-field">
+      <label>Amount (SAR)</label>
+      <input type="number" id="phAmount" placeholder="0">
+    </div>
+    <div class="modal-field">
+      <label>Method</label>
+      <input type="text" id="phMethod" placeholder="e.g. Bank transfer, Cash">
+    </div>
+    <div class="modal-field">
+      <label>Notes</label>
+      <input type="text" id="phNotes" placeholder="Optional notes">
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn-cancel" onclick="closePaymentHistoryModal()">Close</button>
+      <button class="modal-btn-save" id="phSaveBtn" onclick="addPaymentEntry()">Add Payment</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="clientPaymentOverlay" onclick="if(event.target===this) closeClientPaymentModal()">
+  <div class="modal-box" style="max-width:520px;">
+    <div class="modal-header">
+      <h2 id="clientPaymentTitle">Billing &amp; Payments</h2>
+      <button class="modal-close" onclick="closeClientPaymentModal()">×</button>
+    </div>
+
+    <div id="clientPaymentSummary" style="margin-bottom:18px;"></div>
+
+    <div class="modal-section-title">Invoices (billed to client)</div>
+    <div id="clientInvoiceList" style="margin-bottom:14px;"></div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+      <div class="modal-field">
+        <label>Date</label>
+        <input type="date" id="ciDate">
+      </div>
+      <div class="modal-field">
+        <label>Invoice #</label>
+        <input type="text" id="ciInvoice" placeholder="e.g. INV-1042">
+      </div>
+    </div>
+    <div class="modal-field">
+      <label>Amount (SAR)</label>
+      <input type="number" id="ciAmount" placeholder="0">
+    </div>
+    <div class="modal-field">
+      <label>Description</label>
+      <input type="text" id="ciDescription" placeholder="What is this invoice for?">
+    </div>
+    <div class="modal-actions" style="margin-bottom:22px;">
+      <button class="modal-btn-save" id="ciSaveBtn" onclick="addClientInvoiceEntry()" style="flex:none; width:100%;">+ Bill Client</button>
+    </div>
+
+    <div class="modal-section-title">Payments received</div>
+    <div id="clientPaymentList" style="margin-bottom:14px;"></div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+      <div class="modal-field">
+        <label>Date</label>
+        <input type="date" id="cpDate">
+      </div>
+      <div class="modal-field">
+        <label>Invoice #</label>
+        <input type="text" id="cpInvoice" placeholder="e.g. INV-1042">
+      </div>
+    </div>
+    <div class="modal-field">
+      <label>Amount (SAR)</label>
+      <input type="number" id="cpAmount" placeholder="0">
+    </div>
+    <div class="modal-field">
+      <label>Source</label>
+      <input type="text" id="cpSource" placeholder="e.g. Bank transfer, Cheque">
+    </div>
+    <div class="modal-field">
+      <label>Notes</label>
+      <input type="text" id="cpNotes" placeholder="Optional notes">
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn-cancel" onclick="closeClientPaymentModal()">Close</button>
+      <button class="modal-btn-save" id="cpSaveBtn" onclick="addClientPaymentEntry()">+ Log Payment Received</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="expenseModalOverlay" onclick="if(event.target===this) closeExpenseModal()">
+  <div class="modal-box" style="max-width:420px;">
+    <div class="modal-header">
+      <h2>Add Expense</h2>
+      <button class="modal-close" onclick="closeExpenseModal()">×</button>
+    </div>
+    <div class="modal-field">
+      <label>Date</label>
+      <input type="date" id="expDate">
+    </div>
+    <div class="modal-field">
+      <label>Category</label>
+      <input type="text" id="expCategory" placeholder="e.g. Software, Ads, Salaries">
+    </div>
+    <div class="modal-field">
+      <label>Description</label>
+      <input type="text" id="expDescription" placeholder="What was this for?">
+    </div>
+    <div class="modal-field">
+      <label>Amount (SAR)</label>
+      <input type="number" id="expAmount" placeholder="0">
+    </div>
+    <div class="modal-field">
+      <label>Notes</label>
+      <input type="text" id="expNotes" placeholder="Optional notes">
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn-cancel" onclick="closeExpenseModal()">Cancel</button>
+      <button class="modal-btn-save" id="expSaveBtn" onclick="saveExpense()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="companyModalOverlay" onclick="if(event.target===this) closeCompanyModal()">
+  <div class="modal-box" style="max-width:440px;">
+    <div class="modal-header">
+      <h2 id="companyModalTitle">Add Company</h2>
+      <button class="modal-close" onclick="closeCompanyModal()">×</button>
+    </div>
+    <div class="modal-field">
+      <label>Company Name</label>
+      <input type="text" id="cmCompanyName" placeholder="e.g. Almarai, STC, Jarir">
+    </div>
+    <div class="modal-field">
+      <label>Contact Person</label>
+      <input type="text" id="cmContactPerson" placeholder="Who do you deal with?">
+    </div>
+    <div class="modal-field">
+      <label>Phone</label>
+      <input type="text" id="cmPhone" placeholder="+966 5X XXX XXXX">
+    </div>
+    <div class="modal-field">
+      <label>Email</label>
+      <input type="email" id="cmEmail" placeholder="contact@company.com">
+    </div>
+    <div class="modal-field">
+      <label>Industry</label>
+      <input type="text" id="cmIndustry" placeholder="e.g. Retail, Telecom, F&amp;B">
+    </div>
+    <div class="modal-field">
+      <label>Notes</label>
+      <input type="text" id="cmNotes" placeholder="Optional notes">
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn-cancel" onclick="closeCompanyModal()">Cancel</button>
+      <button class="modal-btn-save" id="cmSaveBtn" onclick="saveCompany()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="companyCreatorsOverlay" onclick="if(event.target===this) closeCompanyCreatorsModal()">
+  <div class="modal-box" style="max-width:600px;">
+    <div class="modal-header">
+      <h2 id="companyCreatorsTitle">Client Statement</h2>
+      <button class="modal-close" onclick="closeCompanyCreatorsModal()">×</button>
+    </div>
+    <div id="companyCreatorsBody"></div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="assignCreatorsOverlay" onclick="if(event.target===this) closeAssignCreatorsModal()">
+  <div class="modal-box" style="max-width:480px;">
+    <div class="modal-header">
+      <h2 id="assignCreatorsTitle">Assign Creators</h2>
+      <button class="modal-close" onclick="closeAssignCreatorsModal()">×</button>
+    </div>
+    <input type="text" id="assignSearchInput" placeholder="Search creators..." oninput="renderAssignCreatorsList()"
+      style="width:100%; border:1.5px solid var(--line); border-radius:8px; padding:9px 12px; font-family:'Cairo'; font-size:13px; margin-bottom:14px;">
+    <div id="assignCreatorsList" style="max-height:340px; overflow-y:auto; margin-bottom:16px;"></div>
+    <div class="modal-actions">
+      <button class="modal-btn-cancel" onclick="closeAssignCreatorsModal()">Cancel</button>
+      <button class="modal-btn-save" id="assignSaveBtn" onclick="saveAssignedCreators()">Save</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyqGQr5yPgaYvhLiYzdqwGK4puzpEHJ4gAqy9cQbT0k0iWQF9KB-gHfJzZ8xRq1OwmD/exec";
 let dashboardKey = '';
 let allRecords = [];
+let expenseRecords = [];
 let platformChartInstance = null;
 let categoryChartInstance = null;
 let languageChartInstance = null;
@@ -248,8 +640,19 @@ function loadDashboard(){
   fetchData();
 }
 
+document.getElementById('tabSwitch').addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-tab]');
+  if(!btn) return;
+  document.querySelectorAll('#tabSwitch button').forEach(b => b.classList.toggle('active', b === btn));
+  document.getElementById('registrationsTab').classList.toggle('hidden', btn.dataset.tab !== 'registrations');
+  document.getElementById('financeTab').classList.toggle('hidden', btn.dataset.tab !== 'finance');
+  document.getElementById('companiesTab').classList.toggle('hidden', btn.dataset.tab !== 'companies');
+  if(btn.dataset.tab === 'finance') fetchFinanceData();
+  if(btn.dataset.tab === 'companies') fetchFinanceData();
+});
+
 function fetchData(){
-  fetch(`${WEB_APP_URL}?action=dashboard&key=${encodeURIComponent(dashboardKey)}`)
+  fetch(`${WEB_APP_URL}?action=dashboard&key=${encodeURIComponent(dashboardKey)}&_=${Date.now()}`, { cache: 'no-store' })
     .then(r => r.json())
     .then(res => {
       if(res.result === 'success'){
@@ -258,6 +661,7 @@ function fetchData(){
         allRecords = res.records || [];
         populateFilterOptions();
         applyFilters();
+        populateCreatorsDatalist();
       } else {
         document.getElementById('keyError').style.display = 'block';
       }
@@ -265,6 +669,1119 @@ function fetchData(){
     .catch(() => {
       document.getElementById('keyError').textContent = 'Could not reach the server. Check your connection.';
       document.getElementById('keyError').style.display = 'block';
+    });
+}
+
+let paymentRecords = [];
+let clientPaymentRecords = [];
+let clientInvoiceRecords = [];
+let companyRecords = [];
+let campaignRecords = [];
+
+function fetchFinanceData(){
+  fetch(`${WEB_APP_URL}?action=finance&key=${encodeURIComponent(dashboardKey)}&_=${Date.now()}`, { cache: 'no-store' })
+    .then(r => r.json())
+    .then(res => {
+      if(res.result === 'success'){
+        campaignRecords = res.campaigns || [];
+        paymentRecords = res.payments || [];
+        clientPaymentRecords = res.clientPayments || [];
+        clientInvoiceRecords = res.clientInvoices || [];
+        expenseRecords = res.expenses || [];
+        companyRecords = res.companies || [];
+        renderFinanceStats();
+        renderFinanceTable();
+        renderExpensesTable();
+        renderCompaniesTable();
+        populateCompaniesDatalist();
+        populateCreatorsDatalist();
+      }
+    })
+    .catch(() => alert('Could not load finance data. Check your connection.'));
+}
+
+function num(v){
+  const n = parseFloat(v);
+  return isNaN(n) ? 0 : n;
+}
+
+// Payments TO a creator are tracked per campaign, not per creator overall —
+// a creator can have several campaigns, each with its own payment history.
+function totalPaidFor(campaignId){
+  return paymentRecords
+    .filter(p => p['Campaign ID'] === campaignId)
+    .reduce((s,p) => s + num(p['Amount (SAR)']), 0);
+}
+
+function totalReceivedFor(campaignId){
+  return clientPaymentRecords
+    .filter(p => p['Campaign ID'] === campaignId)
+    .reduce((s,p) => s + num(p['Amount (SAR)']), 0);
+}
+
+function totalInvoicedFor(campaignId){
+  return clientInvoiceRecords
+    .filter(p => p['Campaign ID'] === campaignId)
+    .reduce((s,p) => s + num(p['Amount (SAR)']), 0);
+}
+
+// Total billed for a campaign: sum of actual invoices if any exist,
+// otherwise fall back to the estimate typed into the campaign itself.
+function billedForRecord(c){
+  const invoiced = totalInvoicedFor(c['Campaign ID']);
+  if(invoiced > 0) return invoiced;
+  return num(c['Client Billing (SAR)']);
+}
+
+function renderFinanceStats(){
+  const totalBilled = campaignRecords.reduce((s,c) => s + billedForRecord(c), 0);
+  const totalPayout = campaignRecords.reduce((s,c) => s + num(c['Creator Payout Target (SAR)']), 0);
+  const totalPaidOut = paymentRecords.reduce((s,p) => s + num(p['Amount (SAR)']), 0);
+  const totalReceived = clientPaymentRecords.reduce((s,p) => s + num(p['Amount (SAR)']), 0);
+  const grossProfit = totalBilled - totalPayout;
+  const totalExpenses = expenseRecords.reduce((s,r) => s + num(r['Amount (SAR)']), 0);
+  const netProfit = grossProfit - totalExpenses;
+
+  document.getElementById('finTotalBilled').textContent = totalBilled.toLocaleString() + ' SAR';
+  document.getElementById('finTotalReceived').textContent = totalReceived.toLocaleString() + ' SAR';
+  document.getElementById('finTotalPayout').textContent = totalPaidOut.toLocaleString() + ' SAR';
+  document.getElementById('finGrossProfit').textContent = grossProfit.toLocaleString() + ' SAR';
+  document.getElementById('finExpenses').textContent = totalExpenses.toLocaleString() + ' SAR';
+  document.getElementById('finNetProfit').textContent = netProfit.toLocaleString() + ' SAR';
+}
+
+function renderFinanceTable(){
+  const q = (document.getElementById('financeSearchInput').value || '').trim().toLowerCase();
+  const filtered = campaignRecords.filter(c => {
+    if(!q) return true;
+    return String(c['Registration ID']||'').toLowerCase().includes(q) ||
+           String(c['Creator Name']||'').toLowerCase().includes(q) ||
+           String(c['Company Name']||'').toLowerCase().includes(q) ||
+           String(c['Campaign Title']||'').toLowerCase().includes(q);
+  });
+
+  const tbody = document.getElementById('financeTableBody');
+  const emptyState = document.getElementById('financeEmptyState');
+
+  if(filtered.length === 0){
+    tbody.innerHTML = '';
+    emptyState.classList.remove('hidden');
+    return;
+  }
+  emptyState.classList.add('hidden');
+
+  window.currentFinanceRecords = filtered;
+
+  tbody.innerHTML = filtered.map((c, idx) => {
+    const billing = billedForRecord(c);
+    const target = num(c['Creator Payout Target (SAR)']);
+    const paid = totalPaidFor(c['Campaign ID']);
+    const remaining = target - paid;
+    let payStatus = 'Unpaid';
+    if(target > 0 && paid >= target) payStatus = 'Paid';
+    else if(paid > 0) payStatus = 'Partial';
+    const isPending = payStatus !== 'Paid';
+    const pct = target > 0 ? Math.min(100, Math.round((paid/target)*100)) : 0;
+    const campStatus = c['Status'] || 'Active';
+    return `<tr>
+      <td data-label="Client">${c['Company Name'] ? `<span class="client-chip">${c['Company Name']}</span>` : '—'}</td>
+      <td data-label="Creator">
+        <div class="cell-primary">${c['Creator Name'] || '—'}</div>
+        <div class="cell-secondary">${c['Registration ID'] || '—'}</div>
+      </td>
+      <td data-label="Campaign">
+        <div class="cell-primary" style="font-size:13px;">${c['Campaign Title'] || '—'}</div>
+        <div class="cell-secondary">${campStatus}</div>
+      </td>
+      <td data-label="Client Billing" class="cell-money">${billing ? billing.toLocaleString() + ' SAR' : '—'}</td>
+      <td data-label="Payout Target" class="cell-money">${target ? target.toLocaleString() + ' SAR' : '—'}</td>
+      <td data-label="Payment Progress" style="min-width:130px;">
+        <div class="cell-secondary" style="margin:0;">${paid.toLocaleString()} / ${target.toLocaleString()} SAR</div>
+        <div class="pay-progress"><div class="pay-progress-fill${pct>=100?' paid-full':''}" style="width:${pct}%;"></div></div>
+        <div class="pay-progress-label">${remaining > 0 ? remaining.toLocaleString() + ' SAR remaining' : 'Fully paid'}</div>
+      </td>
+      <td data-label="Status"><span class="pill${isPending ? ' pending' : ''}">${payStatus}</span></td>
+      <td>
+        <div class="action-group">
+          <button class="details-btn" onclick="openFinanceModal(${idx})">Edit</button>
+          <button class="details-btn" onclick="openClientPaymentModal(${idx})">Billing</button>
+          <button class="details-btn" onclick="openPaymentHistoryModal(${idx})">Payments</button>
+          <button class="delete-x" onclick="deleteCampaignEntry('${c['Campaign ID']}')" title="Delete">×</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function renderExpensesTable(){
+  const tbody = document.getElementById('expensesTableBody');
+  const emptyState = document.getElementById('expensesEmptyState');
+
+  if(expenseRecords.length === 0){
+    tbody.innerHTML = '';
+    emptyState.classList.remove('hidden');
+    return;
+  }
+  emptyState.classList.add('hidden');
+
+  tbody.innerHTML = expenseRecords.slice().reverse().map(r => `<tr>
+    <td data-label="Date">${r['Date'] || '—'}</td>
+    <td data-label="Category">${r['Category'] || '—'}</td>
+    <td data-label="Description">${r['Description'] || '—'}</td>
+    <td data-label="Amount">${num(r['Amount (SAR)']).toLocaleString()} SAR</td>
+    <td data-label="Notes">${r['Notes'] || '—'}</td>
+    <td><button class="delete-x" onclick="deleteExpense('${r['ID']}')" title="Delete">×</button></td>
+  </tr>`).join('');
+}
+
+// ---- Campaign create/edit modal ----
+
+function populateCreatorsDatalist(){
+  const el = document.getElementById('creatorsDatalist');
+  if(!el || !allRecords.length) return;
+  el.innerHTML = allRecords.map(r => `<option value="${(r['Name']||'').replace(/"/g,'')} — ${r['Registration ID']}"></option>`).join('');
+}
+
+function handleCreatorPick(value){
+  const match = allRecords.find(r => `${r['Name']} — ${r['Registration ID']}` === value);
+  if(match){
+    window.fmSelectedRegId = match['Registration ID'];
+    window.fmSelectedCreatorName = match['Name'];
+  } else {
+    window.fmSelectedRegId = '';
+    window.fmSelectedCreatorName = '';
+  }
+}
+
+function openFinanceModal(idx){
+  const c = (idx !== undefined) ? window.currentFinanceRecords[idx] : null;
+  window.editingCampaign = c;
+  document.getElementById('financeModalTitle').textContent = c
+    ? `Edit Campaign — ${c['Campaign Title'] || c['Creator Name'] || 'Campaign'}`
+    : 'Add Campaign';
+
+  const creatorSearchEl = document.getElementById('fmCreatorSearch');
+  const lockedEl = document.getElementById('fmCreatorLocked');
+  if(c){
+    creatorSearchEl.value = '';
+    creatorSearchEl.classList.add('hidden');
+    lockedEl.textContent = `${c['Creator Name'] || ''} (${c['Registration ID'] || ''})`;
+    lockedEl.classList.remove('hidden');
+    window.fmSelectedRegId = c['Registration ID'];
+    window.fmSelectedCreatorName = c['Creator Name'];
+  } else {
+    creatorSearchEl.value = '';
+    creatorSearchEl.classList.remove('hidden');
+    lockedEl.classList.add('hidden');
+    window.fmSelectedRegId = '';
+    window.fmSelectedCreatorName = '';
+  }
+
+  document.getElementById('fmClientName').value = c ? c['Company Name'] || '' : '';
+  document.getElementById('fmCampaignTitle').value = c ? c['Campaign Title'] || '' : '';
+  document.getElementById('fmClientBilling').value = c ? c['Client Billing (SAR)'] || '' : '';
+  document.getElementById('fmCreatorPayout').value = c ? c['Creator Payout Target (SAR)'] || '' : '';
+  document.getElementById('fmStatus').value = c ? (c['Status'] || 'Active') : 'Active';
+  document.getElementById('fmNotes').value = c ? c['Notes'] || '' : '';
+  document.getElementById('financeModalOverlay').classList.remove('hidden');
+}
+
+function closeFinanceModal(){
+  document.getElementById('financeModalOverlay').classList.add('hidden');
+}
+
+function saveFinanceRow(){
+  const isEdit = !!window.editingCampaign;
+  const registrationId = isEdit ? window.editingCampaign['Registration ID'] : window.fmSelectedRegId;
+  const creatorName = isEdit ? window.editingCampaign['Creator Name'] : window.fmSelectedCreatorName;
+
+  if(!registrationId){
+    alert('Please select a creator from the suggestions (type their name and pick one).');
+    return;
+  }
+
+  const btn = document.getElementById('fmSaveBtn');
+  btn.disabled = true;
+  btn.textContent = 'Saving…';
+
+  fetch(WEB_APP_URL, {
+    method: 'POST',
+    headers: {'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify({
+      action: 'saveCampaign',
+      key: dashboardKey,
+      campaignId: isEdit ? window.editingCampaign['Campaign ID'] : '',
+      registrationId: registrationId,
+      creatorName: creatorName,
+      companyName: document.getElementById('fmClientName').value,
+      campaignTitle: document.getElementById('fmCampaignTitle').value,
+      clientBilling: document.getElementById('fmClientBilling').value,
+      creatorPayout: document.getElementById('fmCreatorPayout').value,
+      status: document.getElementById('fmStatus').value,
+      notes: document.getElementById('fmNotes').value
+    })
+  })
+  .then(r => r.json())
+  .then(res => {
+    btn.disabled = false;
+    btn.textContent = 'Save Campaign';
+    if(res.result === 'success'){
+      closeFinanceModal();
+      fetchFinanceData();
+    } else {
+      alert(res.message || 'Could not save. Please try again.');
+    }
+  })
+  .catch(() => {
+    btn.disabled = false;
+    btn.textContent = 'Save Campaign';
+    alert('Could not reach the server. Check your connection.');
+  });
+}
+
+function deleteCampaignEntry(campaignId){
+  if(!confirm('Delete this campaign? Any payment history tied to it will remain in the sheet but become unlinked.')) return;
+  fetch(WEB_APP_URL, {
+    method: 'POST',
+    headers: {'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify({ action: 'deleteCampaign', key: dashboardKey, campaignId: campaignId })
+  })
+  .then(r => r.json())
+  .then(res => {
+    if(res.result === 'success'){
+      fetchFinanceData();
+    } else {
+      alert('Could not delete. Please try again.');
+    }
+  })
+  .catch(() => alert('Could not reach the server. Check your connection.'));
+}
+
+// ---- Creator payment history (per campaign) ----
+
+function openPaymentHistoryModal(idx){
+  const c = window.currentFinanceRecords[idx];
+  if(!c) return;
+  window.paymentHistoryRecord = c;
+  document.getElementById('paymentHistoryTitle').textContent = `Payments — ${c['Creator Name'] || c['Registration ID']}${c['Campaign Title'] ? ' · ' + c['Campaign Title'] : ''}`;
+  document.getElementById('phDate').value = new Date().toISOString().slice(0,10);
+  document.getElementById('phAmount').value = '';
+  document.getElementById('phMethod').value = '';
+  document.getElementById('phNotes').value = '';
+  renderPaymentHistoryBody();
+  document.getElementById('paymentHistoryOverlay').classList.remove('hidden');
+}
+
+function renderPaymentHistoryBody(){
+  const c = window.paymentHistoryRecord;
+  if(!c) return;
+
+  const target = num(c['Creator Payout Target (SAR)']);
+  const list = paymentRecords.filter(p => p['Campaign ID'] === c['Campaign ID']);
+  const paid = list.reduce((s,p) => s + num(p['Amount (SAR)']), 0);
+  const remaining = target - paid;
+
+  document.getElementById('paymentHistorySummary').innerHTML = `
+    <div class="review-row"><span class="rlabel">Payout Target</span><span class="rvalue">${target.toLocaleString()} SAR</span></div>
+    <div class="review-row"><span class="rlabel">Total Paid</span><span class="rvalue">${paid.toLocaleString()} SAR</span></div>
+    <div class="review-row"><span class="rlabel">Remaining</span><span class="rvalue">${remaining.toLocaleString()} SAR</span></div>
+  `;
+
+  const listEl = document.getElementById('paymentHistoryList');
+  if(list.length === 0){
+    listEl.innerHTML = `<div class="empty-note" style="font-size:12.5px; color:var(--ink-soft); background:var(--mist); border-radius:10px; padding:12px;">No payments logged yet.</div>`;
+    return;
+  }
+
+  listEl.innerHTML = list.slice().reverse().map(p => `
+    <div class="modal-row">
+      <span class="mlabel">${p['Date'] || '—'} · ${p['Method'] || 'Payment'}${p['Notes'] ? ' · ' + p['Notes'] : ''}</span>
+      <span class="mvalue" style="display:flex; align-items:center; gap:8px;">
+        ${num(p['Amount (SAR)']).toLocaleString()} SAR
+        <button class="delete-x" onclick="deletePaymentEntry('${p['ID']}')" title="Delete">×</button>
+      </span>
+    </div>
+  `).join('');
+}
+
+function closePaymentHistoryModal(){
+  document.getElementById('paymentHistoryOverlay').classList.add('hidden');
+}
+
+function addPaymentEntry(){
+  const c = window.paymentHistoryRecord;
+  if(!c) return;
+  const amount = document.getElementById('phAmount').value;
+  if(!amount || num(amount) <= 0){
+    alert('Enter a valid payment amount.');
+    return;
+  }
+
+  const btn = document.getElementById('phSaveBtn');
+  btn.disabled = true;
+  btn.textContent = 'Adding…';
+
+  fetch(WEB_APP_URL, {
+    method: 'POST',
+    headers: {'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify({
+      action: 'addPayment',
+      key: dashboardKey,
+      campaignId: c['Campaign ID'],
+      registrationId: c['Registration ID'],
+      name: c['Creator Name'],
+      date: document.getElementById('phDate').value,
+      amount: amount,
+      method: document.getElementById('phMethod').value,
+      notes: document.getElementById('phNotes').value
+    })
+  })
+  .then(r2 => r2.json())
+  .then(res => {
+    btn.disabled = false;
+    btn.textContent = 'Add Payment';
+    if(res.result === 'success'){
+      document.getElementById('phAmount').value = '';
+      document.getElementById('phMethod').value = '';
+      document.getElementById('phNotes').value = '';
+      fetchFinanceData();
+      setTimeout(() => { if(!document.getElementById('paymentHistoryOverlay').classList.contains('hidden')) renderPaymentHistoryBody(); }, 400);
+    } else {
+      alert('Could not add payment. Please try again.');
+    }
+  })
+  .catch(() => {
+    btn.disabled = false;
+    btn.textContent = 'Add Payment';
+    alert('Could not reach the server. Check your connection.');
+  });
+}
+
+function deletePaymentEntry(id){
+  if(!confirm('Delete this payment entry?')) return;
+  fetch(WEB_APP_URL, {
+    method: 'POST',
+    headers: {'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify({ action: 'deletePayment', key: dashboardKey, id: id })
+  })
+  .then(r => r.json())
+  .then(res => {
+    if(res.result === 'success'){
+      fetchFinanceData();
+      setTimeout(() => { if(!document.getElementById('paymentHistoryOverlay').classList.contains('hidden')) renderPaymentHistoryBody(); }, 400);
+    } else {
+      alert('Could not delete. Please try again.');
+    }
+  })
+  .catch(() => alert('Could not reach the server. Check your connection.'));
+}
+
+// ---- Client billing (invoices + payments received), per campaign or company-level ----
+
+function openClientPaymentModal(idx){
+  const c = window.currentFinanceRecords[idx];
+  if(!c) return;
+  window.clientPaymentRecord = c;
+  document.getElementById('clientPaymentTitle').textContent = `Billing & Payments — ${c['Company Name'] || c['Creator Name'] || c['Registration ID']}`;
+  document.getElementById('ciDate').value = new Date().toISOString().slice(0,10);
+  document.getElementById('ciInvoice').value = '';
+  document.getElementById('ciAmount').value = '';
+  document.getElementById('ciDescription').value = '';
+  document.getElementById('cpDate').value = new Date().toISOString().slice(0,10);
+  document.getElementById('cpAmount').value = '';
+  document.getElementById('cpInvoice').value = '';
+  document.getElementById('cpSource').value = '';
+  document.getElementById('cpNotes').value = '';
+  renderClientPaymentBody();
+  document.getElementById('clientPaymentOverlay').classList.remove('hidden');
+}
+
+function openCompanyBillingModal(idx){
+  const co = window.currentCompanyRecords[idx];
+  if(!co) return;
+  // A pseudo "record" representing company-level billing (not tied to one campaign).
+  window.clientPaymentRecord = { 'Campaign ID': '', 'Registration ID': '', 'Creator Name': '', 'Company Name': co['Company Name'] };
+  document.getElementById('clientPaymentTitle').textContent = `Billing & Payments — ${co['Company Name']}`;
+  document.getElementById('ciDate').value = new Date().toISOString().slice(0,10);
+  document.getElementById('ciInvoice').value = '';
+  document.getElementById('ciAmount').value = '';
+  document.getElementById('ciDescription').value = '';
+  document.getElementById('cpDate').value = new Date().toISOString().slice(0,10);
+  document.getElementById('cpAmount').value = '';
+  document.getElementById('cpInvoice').value = '';
+  document.getElementById('cpSource').value = '';
+  document.getElementById('cpNotes').value = '';
+  renderClientPaymentBody();
+  document.getElementById('clientPaymentOverlay').classList.remove('hidden');
+}
+
+function renderClientPaymentBody(){
+  const c = window.clientPaymentRecord;
+  if(!c) return;
+
+  const isCampaignLevel = !!c['Campaign ID'];
+  let invoices, payments, billed;
+
+  if(isCampaignLevel){
+    invoices = clientInvoiceRecords.filter(p => p['Campaign ID'] === c['Campaign ID']);
+    payments = clientPaymentRecords.filter(p => p['Campaign ID'] === c['Campaign ID']);
+    billed = billedForRecord(c);
+  } else {
+    const clientNameLower = (c['Company Name']||'').trim().toLowerCase();
+    invoices = clientInvoiceRecords.filter(p => !p['Campaign ID'] && (p['Client Name']||'').trim().toLowerCase() === clientNameLower);
+    payments = clientPaymentRecords.filter(p => !p['Campaign ID'] && (p['Client Name']||'').trim().toLowerCase() === clientNameLower);
+    billed = invoices.reduce((s,inv) => s + num(inv['Amount (SAR)']), 0);
+  }
+
+  const received = payments.reduce((s,p) => s + num(p['Amount (SAR)']), 0);
+  const outstanding = billed - received;
+
+  document.getElementById('clientPaymentSummary').innerHTML = `
+    <div class="review-row"><span class="rlabel">Total Billed</span><span class="rvalue">${billed.toLocaleString()} SAR</span></div>
+    <div class="review-row"><span class="rlabel">Total Received</span><span class="rvalue">${received.toLocaleString()} SAR</span></div>
+    <div class="review-row"><span class="rlabel">Outstanding</span><span class="rvalue">${outstanding.toLocaleString()} SAR</span></div>
+  `;
+
+  const invoiceListEl = document.getElementById('clientInvoiceList');
+  if(invoices.length === 0){
+    invoiceListEl.innerHTML = `<div class="empty-note" style="font-size:12.5px; color:var(--ink-soft); background:var(--mist); border-radius:10px; padding:12px;">No invoices billed yet.</div>`;
+  } else {
+    invoiceListEl.innerHTML = invoices.slice().reverse().map(inv => `
+      <div class="modal-row">
+        <span class="mlabel">${inv['Date'] || '—'} · ${inv['Invoice #'] ? 'Inv #' + inv['Invoice #'] : 'Invoice'}${inv['Description'] ? ' · ' + inv['Description'] : ''}${inv['Name'] ? ' · ' + inv['Name'] : ''}</span>
+        <span class="mvalue" style="display:flex; align-items:center; gap:8px;">
+          ${num(inv['Amount (SAR)']).toLocaleString()} SAR
+          <button class="delete-x" onclick="deleteClientInvoiceEntry('${inv['ID']}')" title="Delete">×</button>
+        </span>
+      </div>
+    `).join('');
+  }
+
+  const paymentListEl = document.getElementById('clientPaymentList');
+  if(payments.length === 0){
+    paymentListEl.innerHTML = `<div class="empty-note" style="font-size:12.5px; color:var(--ink-soft); background:var(--mist); border-radius:10px; padding:12px;">No payments received yet.</div>`;
+  } else {
+    paymentListEl.innerHTML = payments.slice().reverse().map(p => `
+      <div class="modal-row">
+        <span class="mlabel">${p['Date'] || '—'} · ${p['Invoice #'] ? 'Inv #' + p['Invoice #'] + ' · ' : ''}${p['Source'] || 'Payment'}${p['Notes'] ? ' · ' + p['Notes'] : ''}${p['Name'] ? ' · ' + p['Name'] : ''}</span>
+        <span class="mvalue" style="display:flex; align-items:center; gap:8px;">
+          ${num(p['Amount (SAR)']).toLocaleString()} SAR
+          <button class="delete-x" onclick="deleteClientPaymentEntry('${p['ID']}')" title="Delete">×</button>
+        </span>
+      </div>
+    `).join('');
+  }
+}
+
+function closeClientPaymentModal(){
+  document.getElementById('clientPaymentOverlay').classList.add('hidden');
+}
+
+function addClientInvoiceEntry(){
+  const c = window.clientPaymentRecord;
+  if(!c) return;
+  const amount = document.getElementById('ciAmount').value;
+  if(!amount || num(amount) <= 0){
+    alert('Enter a valid invoice amount.');
+    return;
+  }
+
+  const btn = document.getElementById('ciSaveBtn');
+  btn.disabled = true;
+  btn.textContent = 'Adding…';
+
+  fetch(WEB_APP_URL, {
+    method: 'POST',
+    headers: {'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify({
+      action: 'addClientInvoice',
+      key: dashboardKey,
+      campaignId: c['Campaign ID'] || '',
+      registrationId: c['Registration ID'] || '',
+      name: c['Creator Name'] || '',
+      clientName: c['Company Name'],
+      date: document.getElementById('ciDate').value,
+      invoiceNumber: document.getElementById('ciInvoice').value,
+      amount: amount,
+      description: document.getElementById('ciDescription').value
+    })
+  })
+  .then(r2 => r2.json())
+  .then(res => {
+    btn.disabled = false;
+    btn.textContent = '+ Bill Client';
+    if(res.result === 'success'){
+      document.getElementById('ciInvoice').value = '';
+      document.getElementById('ciAmount').value = '';
+      document.getElementById('ciDescription').value = '';
+      fetchFinanceData();
+      setTimeout(() => { if(!document.getElementById('clientPaymentOverlay').classList.contains('hidden')) renderClientPaymentBody(); }, 400);
+    } else {
+      alert('Could not add invoice. Please try again.');
+    }
+  })
+  .catch(() => {
+    btn.disabled = false;
+    btn.textContent = '+ Bill Client';
+    alert('Could not reach the server. Check your connection.');
+  });
+}
+
+function deleteClientInvoiceEntry(id){
+  if(!confirm('Delete this invoice?')) return;
+  fetch(WEB_APP_URL, {
+    method: 'POST',
+    headers: {'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify({ action: 'deleteClientInvoice', key: dashboardKey, id: id })
+  })
+  .then(r => r.json())
+  .then(res => {
+    if(res.result === 'success'){
+      fetchFinanceData();
+      setTimeout(() => { if(!document.getElementById('clientPaymentOverlay').classList.contains('hidden')) renderClientPaymentBody(); }, 400);
+    } else {
+      alert('Could not delete. Please try again.');
+    }
+  })
+  .catch(() => alert('Could not reach the server. Check your connection.'));
+}
+
+function addClientPaymentEntry(){
+  const c = window.clientPaymentRecord;
+  if(!c) return;
+  const amount = document.getElementById('cpAmount').value;
+  if(!amount || num(amount) <= 0){
+    alert('Enter a valid payment amount.');
+    return;
+  }
+
+  const btn = document.getElementById('cpSaveBtn');
+  btn.disabled = true;
+  btn.textContent = 'Adding…';
+
+  fetch(WEB_APP_URL, {
+    method: 'POST',
+    headers: {'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify({
+      action: 'addClientPayment',
+      key: dashboardKey,
+      campaignId: c['Campaign ID'] || '',
+      registrationId: c['Registration ID'] || '',
+      name: c['Creator Name'] || '',
+      clientName: c['Company Name'],
+      date: document.getElementById('cpDate').value,
+      amount: amount,
+      invoiceNumber: document.getElementById('cpInvoice').value,
+      source: document.getElementById('cpSource').value,
+      notes: document.getElementById('cpNotes').value
+    })
+  })
+  .then(r2 => r2.json())
+  .then(res => {
+    btn.disabled = false;
+    btn.textContent = '+ Log Payment Received';
+    if(res.result === 'success'){
+      document.getElementById('cpAmount').value = '';
+      document.getElementById('cpInvoice').value = '';
+      document.getElementById('cpSource').value = '';
+      document.getElementById('cpNotes').value = '';
+      fetchFinanceData();
+      setTimeout(() => { if(!document.getElementById('clientPaymentOverlay').classList.contains('hidden')) renderClientPaymentBody(); }, 400);
+    } else {
+      alert('Could not add payment. Please try again.');
+    }
+  })
+  .catch(() => {
+    btn.disabled = false;
+    btn.textContent = '+ Log Payment Received';
+    alert('Could not reach the server. Check your connection.');
+  });
+}
+
+function deleteClientPaymentEntry(id){
+  if(!confirm('Delete this client payment entry?')) return;
+  fetch(WEB_APP_URL, {
+    method: 'POST',
+    headers: {'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify({ action: 'deleteClientPayment', key: dashboardKey, id: id })
+  })
+  .then(r => r.json())
+  .then(res => {
+    if(res.result === 'success'){
+      fetchFinanceData();
+      setTimeout(() => { if(!document.getElementById('clientPaymentOverlay').classList.contains('hidden')) renderClientPaymentBody(); }, 400);
+    } else {
+      alert('Could not delete. Please try again.');
+    }
+  })
+  .catch(() => alert('Could not reach the server. Check your connection.'));
+}
+
+// ---- Expenses ----
+
+function openExpenseModal(){
+  document.getElementById('expDate').value = new Date().toISOString().slice(0,10);
+  document.getElementById('expCategory').value = '';
+  document.getElementById('expDescription').value = '';
+  document.getElementById('expAmount').value = '';
+  document.getElementById('expNotes').value = '';
+  document.getElementById('expenseModalOverlay').classList.remove('hidden');
+}
+
+function closeExpenseModal(){
+  document.getElementById('expenseModalOverlay').classList.add('hidden');
+}
+
+function saveExpense(){
+  const btn = document.getElementById('expSaveBtn');
+  btn.disabled = true;
+  btn.textContent = 'Saving…';
+
+  fetch(WEB_APP_URL, {
+    method: 'POST',
+    headers: {'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify({
+      action: 'addExpense',
+      key: dashboardKey,
+      date: document.getElementById('expDate').value,
+      category: document.getElementById('expCategory').value,
+      description: document.getElementById('expDescription').value,
+      amount: document.getElementById('expAmount').value,
+      notes: document.getElementById('expNotes').value
+    })
+  })
+  .then(r => r.json())
+  .then(res => {
+    btn.disabled = false;
+    btn.textContent = 'Save';
+    if(res.result === 'success'){
+      closeExpenseModal();
+      fetchFinanceData();
+    } else {
+      alert('Could not save. Please try again.');
+    }
+  })
+  .catch(() => {
+    btn.disabled = false;
+    btn.textContent = 'Save';
+    alert('Could not reach the server. Check your connection.');
+  });
+}
+
+function deleteExpense(id){
+  if(!confirm('Delete this expense?')) return;
+  fetch(WEB_APP_URL, {
+    method: 'POST',
+    headers: {'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify({ action: 'deleteExpense', key: dashboardKey, id: id })
+  })
+  .then(r => r.json())
+  .then(res => {
+    if(res.result === 'success'){
+      fetchFinanceData();
+    } else {
+      alert('Could not delete. Please try again.');
+    }
+  })
+  .catch(() => alert('Could not reach the server. Check your connection.'));
+}
+
+// ---- Companies ----
+
+function populateCompaniesDatalist(){
+  const el = document.getElementById('companiesDatalist');
+  if(!el) return;
+  el.innerHTML = companyRecords.map(c => `<option value="${c['Company Name']}"></option>`).join('');
+}
+
+// All campaigns belonging to a given company (one company can have many campaigns
+// across many different creators, and the same creator can appear more than once
+// if they're running multiple campaigns for that company).
+function campaignsForCompany(companyName){
+  const nameLower = companyName.trim().toLowerCase();
+  return campaignRecords.filter(c => (c['Company Name']||'').trim().toLowerCase() === nameLower);
+}
+
+function companyTotals(companyName){
+  const companyNameLower = companyName.trim().toLowerCase();
+  const campaigns = campaignsForCompany(companyName);
+  const campaignIds = campaigns.map(c => c['Campaign ID']);
+
+  const invoices = clientInvoiceRecords.filter(inv =>
+    campaignIds.includes(inv['Campaign ID']) || (!inv['Campaign ID'] && (inv['Client Name']||'').trim().toLowerCase() === companyNameLower)
+  );
+  const payments = clientPaymentRecords.filter(p =>
+    campaignIds.includes(p['Campaign ID']) || (!p['Campaign ID'] && (p['Client Name']||'').trim().toLowerCase() === companyNameLower)
+  );
+
+  const billed = invoices.reduce((s,inv) => s + num(inv['Amount (SAR)']), 0) ||
+    campaigns.reduce((s,c) => s + billedForRecord(c), 0);
+  const received = payments.reduce((s,p) => s + num(p['Amount (SAR)']), 0);
+
+  return { billed, received, invoices, payments, campaigns };
+}
+
+function renderCompaniesTable(){
+  const tbody = document.getElementById('companiesTableBody');
+  const emptyState = document.getElementById('companiesEmptyState');
+
+  if(companyRecords.length === 0){
+    tbody.innerHTML = '';
+    emptyState.classList.remove('hidden');
+    return;
+  }
+  emptyState.classList.add('hidden');
+
+  window.currentCompanyRecords = companyRecords;
+
+  tbody.innerHTML = companyRecords.map((co, idx) => {
+    const { billed, received, campaigns } = companyTotals(co['Company Name']);
+    const distinctCreators = new Set(campaigns.map(c => c['Registration ID'])).size;
+    return `<tr>
+      <td data-label="Company">${co['Company Name'] || '—'}</td>
+      <td data-label="Contact Person">${co['Contact Person'] || '—'}</td>
+      <td data-label="Phone">${co['Phone'] || '—'}</td>
+      <td data-label="Email">${co['Email'] || '—'}</td>
+      <td data-label="Industry">${co['Industry'] || '—'}</td>
+      <td data-label="Creators">${campaigns.length} campaign${campaigns.length===1?'':'s'} · ${distinctCreators} creator${distinctCreators===1?'':'s'}</td>
+      <td data-label="Billed">${billed.toLocaleString()} SAR</td>
+      <td data-label="Received">${received.toLocaleString()} SAR</td>
+      <td style="display:flex; gap:6px; flex-wrap:wrap;">
+        <button class="details-btn" onclick="openAssignCreatorsModal(${idx})">Assign Creators</button>
+        <button class="details-btn" onclick="openCompanyBillingModal(${idx})">Billing</button>
+        <button class="details-btn" onclick="viewCompanyCreators(${idx})">Statement</button>
+        <button class="details-btn" onclick="openCompanyModal(${idx})">Edit</button>
+        <button class="delete-x" onclick="deleteCompany('${(co['Company Name']||'').replace(/'/g,"\\'")}')" title="Delete">×</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function openCompanyModal(idx){
+  window.editingCompanyIndex = (idx === undefined) ? null : idx;
+  const c = (idx !== undefined) ? window.currentCompanyRecords[idx] : null;
+  document.getElementById('companyModalTitle').textContent = c ? `Edit — ${c['Company Name']}` : 'Add Company';
+  document.getElementById('cmCompanyName').value = c ? c['Company Name'] || '' : '';
+  document.getElementById('cmContactPerson').value = c ? c['Contact Person'] || '' : '';
+  document.getElementById('cmPhone').value = c ? c['Phone'] || '' : '';
+  document.getElementById('cmEmail').value = c ? c['Email'] || '' : '';
+  document.getElementById('cmIndustry').value = c ? c['Industry'] || '' : '';
+  document.getElementById('cmNotes').value = c ? c['Notes'] || '' : '';
+  document.getElementById('companyModalOverlay').classList.remove('hidden');
+}
+
+function closeCompanyModal(){
+  document.getElementById('companyModalOverlay').classList.add('hidden');
+}
+
+function saveCompany(){
+  const companyName = document.getElementById('cmCompanyName').value.trim();
+  if(!companyName){
+    alert('Enter a company name.');
+    return;
+  }
+
+  const idx = window.editingCompanyIndex;
+  const original = (idx !== null && idx !== undefined) ? window.currentCompanyRecords[idx] : null;
+
+  const btn = document.getElementById('cmSaveBtn');
+  btn.disabled = true;
+  btn.textContent = 'Saving…';
+
+  fetch(WEB_APP_URL, {
+    method: 'POST',
+    headers: {'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify({
+      action: 'saveCompany',
+      key: dashboardKey,
+      companyName: companyName,
+      originalName: original ? original['Company Name'] : '',
+      contactPerson: document.getElementById('cmContactPerson').value,
+      phone: document.getElementById('cmPhone').value,
+      email: document.getElementById('cmEmail').value,
+      industry: document.getElementById('cmIndustry').value,
+      notes: document.getElementById('cmNotes').value
+    })
+  })
+  .then(r => r.json())
+  .then(res => {
+    btn.disabled = false;
+    btn.textContent = 'Save';
+    if(res.result === 'success'){
+      closeCompanyModal();
+      fetchFinanceData();
+    } else {
+      alert('Could not save. Please try again.');
+    }
+  })
+  .catch(() => {
+    btn.disabled = false;
+    btn.textContent = 'Save';
+    alert('Could not reach the server. Check your connection.');
+  });
+}
+
+function deleteCompany(companyName){
+  if(!confirm(`Delete "${companyName}"? This won't remove any campaigns or payment history tied to them.`)) return;
+  fetch(WEB_APP_URL, {
+    method: 'POST',
+    headers: {'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify({ action: 'deleteCompany', key: dashboardKey, companyName: companyName })
+  })
+  .then(r => r.json())
+  .then(res => {
+    if(res.result === 'success'){
+      fetchFinanceData();
+    } else {
+      alert('Could not delete. Please try again.');
+    }
+  })
+  .catch(() => alert('Could not reach the server. Check your connection.'));
+}
+
+function viewCompanyCreators(idx){
+  const co = window.currentCompanyRecords[idx];
+  if(!co) return;
+  const companyName = co['Company Name'];
+  const { billed: totalBilled, received: totalReceived, invoices: allInvoices, payments: allPayments, campaigns } = companyTotals(companyName);
+  const outstanding = totalBilled - totalReceived;
+
+  document.getElementById('companyCreatorsTitle').textContent = `Statement — ${companyName}`;
+
+  let html = `
+    <div class="modal-section">
+      <div class="modal-section-title">Summary</div>
+      <div class="review-row"><span class="rlabel">Contact</span><span class="rvalue">${co['Contact Person'] || '—'}${co['Phone'] ? ' · ' + co['Phone'] : ''}</span></div>
+      <div class="review-row"><span class="rlabel">Total Billed</span><span class="rvalue">${totalBilled.toLocaleString()} SAR</span></div>
+      <div class="review-row"><span class="rlabel">Total Received</span><span class="rvalue">${totalReceived.toLocaleString()} SAR</span></div>
+      <div class="review-row"><span class="rlabel">Outstanding</span><span class="rvalue">${outstanding.toLocaleString()} SAR</span></div>
+    </div>
+  `;
+
+  html += `<div class="modal-section"><div class="modal-section-title">Campaigns (${campaigns.length})</div>`;
+  if(campaigns.length === 0){
+    html += `<div class="empty-note" style="font-size:12.5px; color:var(--ink-soft); background:var(--mist); border-radius:10px; padding:12px;">No campaigns assigned yet. Use "Assign Creators" or the Finance tab's "+ Add Campaign" button.</div>`;
+  } else {
+    html += campaigns.map(c => {
+      const target = num(c['Creator Payout Target (SAR)']);
+      const paid = totalPaidFor(c['Campaign ID']);
+      return `<div class="modal-row">
+        <span class="mlabel">${c['Creator Name'] || c['Registration ID']}${c['Campaign Title'] ? ' — ' + c['Campaign Title'] : ''}</span>
+        <span class="mvalue">${billedForRecord(c).toLocaleString()} SAR billed · ${paid.toLocaleString()}/${target.toLocaleString()} paid</span>
+      </div>`;
+    }).join('');
+  }
+  html += `</div>`;
+
+  html += `<div class="modal-section"><div class="modal-section-title">Invoices (${allInvoices.length})</div>`;
+  if(allInvoices.length === 0){
+    html += `<div class="empty-note" style="font-size:12.5px; color:var(--ink-soft); background:var(--mist); border-radius:10px; padding:12px;">No invoices billed yet.</div>`;
+  } else {
+    html += allInvoices.slice().reverse().map(inv => `
+      <div class="modal-row">
+        <span class="mlabel">${inv['Date'] || '—'} · ${inv['Invoice #'] ? 'Inv #' + inv['Invoice #'] : 'Invoice'} · ${inv['Name'] || ''}</span>
+        <span class="mvalue">${num(inv['Amount (SAR)']).toLocaleString()} SAR</span>
+      </div>
+    `).join('');
+  }
+  html += `</div>`;
+
+  html += `<div class="modal-section"><div class="modal-section-title">Payments Received (${allPayments.length})</div>`;
+  if(allPayments.length === 0){
+    html += `<div class="empty-note" style="font-size:12.5px; color:var(--ink-soft); background:var(--mist); border-radius:10px; padding:12px;">No payments received yet.</div>`;
+  } else {
+    html += allPayments.slice().reverse().map(p => `
+      <div class="modal-row">
+        <span class="mlabel">${p['Date'] || '—'} · ${p['Source'] || 'Payment'} · ${p['Name'] || ''}</span>
+        <span class="mvalue">${num(p['Amount (SAR)']).toLocaleString()} SAR</span>
+      </div>
+    `).join('');
+  }
+  html += `</div>`;
+
+  document.getElementById('companyCreatorsBody').innerHTML = html;
+  document.getElementById('companyCreatorsOverlay').classList.remove('hidden');
+}
+
+function closeCompanyCreatorsModal(){
+  document.getElementById('companyCreatorsOverlay').classList.add('hidden');
+}
+
+// ---- Assign Creators: bulk create/remove campaigns for a company ----
+
+function openAssignCreatorsModal(idx){
+  const co = window.currentCompanyRecords[idx];
+  if(!co) return;
+  window.assigningCompany = co;
+  document.getElementById('assignCreatorsTitle').textContent = `Assign Creators — ${co['Company Name']}`;
+  document.getElementById('assignSearchInput').value = '';
+
+  const companyNameLower = co['Company Name'].trim().toLowerCase();
+  window.assignOriginal = {};   // regId -> campaignId or null
+  window.assignSelections = {}; // regId -> boolean
+  window.assignAmounts = {};    // regId -> {billing, payout}
+
+  allRecords.forEach(r => {
+    const regId = r['Registration ID'];
+    const existingCampaign = campaignRecords.find(c =>
+      c['Registration ID'] === regId && (c['Company Name']||'').trim().toLowerCase() === companyNameLower
+    );
+    window.assignOriginal[regId] = existingCampaign ? existingCampaign['Campaign ID'] : null;
+    window.assignSelections[regId] = !!existingCampaign;
+    window.assignAmounts[regId] = {
+      billing: existingCampaign ? existingCampaign['Client Billing (SAR)'] || '' : '',
+      payout: existingCampaign ? existingCampaign['Creator Payout Target (SAR)'] || '' : ''
+    };
+  });
+
+  renderAssignCreatorsList();
+  document.getElementById('assignCreatorsOverlay').classList.remove('hidden');
+}
+
+function renderAssignCreatorsList(){
+  const q = (document.getElementById('assignSearchInput').value || '').trim().toLowerCase();
+  const companyNameLower = window.assigningCompany['Company Name'].trim().toLowerCase();
+
+  const filtered = allRecords.filter(r => {
+    if(!q) return true;
+    return String(r['Registration ID']||'').toLowerCase().includes(q) || String(r['Name']||'').toLowerCase().includes(q);
+  });
+
+  const listEl = document.getElementById('assignCreatorsList');
+  if(filtered.length === 0){
+    listEl.innerHTML = `<div class="empty-note" style="font-size:12.5px; color:var(--ink-soft); background:var(--mist); border-radius:10px; padding:12px;">No creators match your search.</div>`;
+    return;
+  }
+
+  listEl.innerHTML = filtered.map(r => {
+    const regId = r['Registration ID'];
+    const isChecked = !!window.assignSelections[regId];
+    const amounts = window.assignAmounts[regId] || {billing:'', payout:''};
+
+    // Show other companies this creator already has campaigns with (informational only —
+    // a creator can legitimately work with multiple companies at once).
+    const otherCompanies = [...new Set(
+      campaignRecords
+        .filter(c => c['Registration ID'] === regId && (c['Company Name']||'').trim().toLowerCase() !== companyNameLower)
+        .map(c => c['Company Name'])
+        .filter(Boolean)
+    )];
+
+    return `<div class="assign-row${isChecked ? ' checked' : ''}" id="assignRow_${regId}">
+      <div class="assign-row-top">
+        <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleAssignSelection('${regId}', this.checked)">
+        <div style="flex:1;">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+            <span class="aname">${r['Name'] || regId}</span>
+            ${otherCompanies.length ? `<span class="aowned">also: ${otherCompanies.join(', ')}</span>` : ''}
+          </div>
+          <div class="aid">${regId}</div>
+        </div>
+      </div>
+      <div class="assign-amounts${isChecked ? '' : ' hidden'}" id="assignAmounts_${regId}">
+        <div class="aamt">
+          <label>Bill Company (SAR)</label>
+          <input type="number" min="0" value="${amounts.billing}" oninput="updateAssignAmount('${regId}','billing',this.value)">
+        </div>
+        <div class="aamt">
+          <label>Pay Creator (SAR)</label>
+          <input type="number" min="0" value="${amounts.payout}" oninput="updateAssignAmount('${regId}','payout',this.value)">
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function updateAssignAmount(regId, field, value){
+  if(!window.assignAmounts[regId]) window.assignAmounts[regId] = {billing:'', payout:''};
+  window.assignAmounts[regId][field] = value;
+}
+
+function toggleAssignSelection(regId, checked){
+  window.assignSelections[regId] = checked;
+  const row = document.getElementById(`assignRow_${regId}`);
+  const amountsEl = document.getElementById(`assignAmounts_${regId}`);
+  if(row) row.classList.toggle('checked', checked);
+  if(amountsEl) amountsEl.classList.toggle('hidden', !checked);
+}
+
+function closeAssignCreatorsModal(){
+  document.getElementById('assignCreatorsOverlay').classList.add('hidden');
+}
+
+function saveAssignedCreators(){
+  const companyName = window.assigningCompany['Company Name'];
+
+  const toProcess = Object.keys(window.assignSelections).filter(regId => {
+    const nowChecked = window.assignSelections[regId];
+    const wasChecked = !!window.assignOriginal[regId];
+    if(nowChecked !== wasChecked) return true;
+    if(nowChecked){
+      const campaignId = window.assignOriginal[regId];
+      const campaign = campaignRecords.find(c => c['Campaign ID'] === campaignId);
+      if(!campaign) return false;
+      const amt = window.assignAmounts[regId] || {};
+      const billingChanged = String(amt.billing || '') !== String(campaign['Client Billing (SAR)'] || '');
+      const payoutChanged = String(amt.payout || '') !== String(campaign['Creator Payout Target (SAR)'] || '');
+      return billingChanged || payoutChanged;
+    }
+    return false;
+  });
+
+  if(toProcess.length === 0){
+    closeAssignCreatorsModal();
+    return;
+  }
+
+  const btn = document.getElementById('assignSaveBtn');
+  btn.disabled = true;
+  btn.textContent = 'Saving…';
+
+  const requests = toProcess.map(regId => {
+    const nowChecked = window.assignSelections[regId];
+    const r = allRecords.find(x => x['Registration ID'] === regId);
+    const amt = window.assignAmounts[regId] || {};
+
+    if(nowChecked){
+      const existingCampaignId = window.assignOriginal[regId]; // null if this is a brand new campaign
+      return fetch(WEB_APP_URL, {
+        method: 'POST',
+        headers: {'Content-Type':'text/plain;charset=utf-8'},
+        body: JSON.stringify({
+          action: 'saveCampaign',
+          key: dashboardKey,
+          campaignId: existingCampaignId || '',
+          registrationId: regId,
+          creatorName: r ? r['Name'] : '',
+          companyName: companyName,
+          campaignTitle: '',
+          clientBilling: amt.billing,
+          creatorPayout: amt.payout,
+          status: 'Active',
+          notes: ''
+        })
+      }).then(res => res.json());
+    } else {
+      const campaignId = window.assignOriginal[regId];
+      return fetch(WEB_APP_URL, {
+        method: 'POST',
+        headers: {'Content-Type':'text/plain;charset=utf-8'},
+        body: JSON.stringify({ action: 'deleteCampaign', key: dashboardKey, campaignId: campaignId })
+      }).then(res => res.json());
+    }
+  });
+
+  Promise.all(requests)
+    .then(() => {
+      btn.disabled = false;
+      btn.textContent = 'Save';
+      closeAssignCreatorsModal();
+      fetchFinanceData();
+    })
+    .catch(() => {
+      btn.disabled = false;
+      btn.textContent = 'Save';
+      alert('Some assignments could not be saved. Please try again.');
     });
 }
 
