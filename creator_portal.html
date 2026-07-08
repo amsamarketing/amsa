@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Creator Portal — AMSA Marketing &amp; PR Agency</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal-900:#1F433D;
+    --teal-700:#3E8F82;
+    --teal-500:#6FB8AC;
+    --gold:#B8933E;
+    --gold-deep:#8C6C24;
+    --mist:#F2F7F6;
+    --ink:#122420;
+    --ink-soft:#5C7A73;
+    --paper:#FFFFFF;
+    --line:rgba(18,36,32,0.11);
+    --rust:#B54B3A;
+    --radius:18px;
+    --shadow:0 24px 55px -28px rgba(18,50,44,0.4);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--mist);
+    color:var(--ink);
+    font-family:'Cairo',sans-serif;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .ar{ direction:rtl; unicode-bidi:isolate; color:var(--ink-soft); font-weight:500; }
+  .wrap{ max-width:520px; margin:0 auto; padding:60px 24px 80px; }
+  .eyebrow{
+    font-family:'Space Grotesk',sans-serif;
+    text-transform:uppercase; letter-spacing:.14em; font-size:11.5px;
+    font-weight:600; color:var(--teal-700);
+  }
+  h1{
+    font-family:'Space Grotesk',sans-serif;
+    text-transform:uppercase;
+    font-size:clamp(24px,5vw,32px);
+    line-height:1.15; margin:8px 0 4px; font-weight:700;
+    letter-spacing:-0.01em; color:var(--ink);
+  }
+  .sub{ color:var(--ink-soft); font-size:14.5px; margin:10px 0 28px; line-height:1.5; }
+  .panel{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:32px;
+    box-shadow:var(--shadow);
+  }
+  .field{ margin-bottom:18px; }
+  .field label{ display:block; font-weight:700; font-size:14px; margin-bottom:6px; }
+  .field input{
+    width:100%; border:1.5px solid var(--line); background:#fff;
+    border-radius:10px; padding:12px 14px; font-family:'Cairo',sans-serif;
+    font-size:14.5px; color:var(--ink); transition:.15s;
+  }
+  .field input:focus{
+    outline:none; border-color:var(--teal-700);
+    box-shadow:0 0 0 4px rgba(62,143,130,0.14);
+  }
+  .field .err{ display:none; color:var(--rust); font-size:12px; margin-top:5px; font-weight:600; }
+  .field.invalid input{ border-color:var(--rust); }
+  .field.invalid .err{ display:block; }
+  button.btn{
+    font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px;
+    border-radius:10px; padding:13px 24px; border:none; cursor:pointer;
+    transition:.15s; width:100%; background:var(--ink); color:var(--mist);
+  }
+  button.btn:hover{ background:var(--teal-900); }
+  button.btn:disabled{ opacity:.5; cursor:not-allowed; }
+  .btn-ghost{
+    background:transparent; border:1.5px solid var(--line); color:var(--ink);
+    margin-top:10px;
+  }
+  .btn-ghost:hover{ border-color:var(--ink); background:transparent; }
+  .hint{ text-align:center; font-size:12.5px; color:var(--ink-soft); margin-top:14px; }
+  .hidden{ display:none !important; }
+
+  /* result card */
+  .result-row{
+    display:flex; justify-content:space-between; align-items:flex-start;
+    padding:12px 0; border-bottom:1px solid var(--line); gap:16px;
+  }
+  .result-row:last-child{ border-bottom:none; }
+  .result-label{ font-size:12.5px; color:var(--ink-soft); font-weight:600; }
+  .result-value{ font-size:14.5px; font-weight:700; text-align:right; max-width:60%; }
+  .status-pill{
+    display:inline-block; padding:4px 12px; border-radius:999px;
+    font-size:12px; font-weight:700; background:var(--teal-700); color:#fff;
+  }
+  .status-pill.pending{ background:var(--gold); }
+  .empty-note{
+    font-size:13px; color:var(--ink-soft); background:var(--mist);
+    border-radius:10px; padding:14px; margin-top:16px; line-height:1.5;
+  }
+  .section-title{
+    font-size:11px; text-transform:uppercase; letter-spacing:.08em; font-weight:700;
+    color:var(--teal-700); margin:24px 0 12px;
+  }
+  .campaign-card{
+    border:1.5px solid var(--line); border-radius:14px; padding:16px; margin-bottom:12px; background:#fff;
+  }
+  .campaign-card-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:10px; }
+  .campaign-company{ font-weight:700; font-size:15px; }
+  .campaign-title{ font-size:12.5px; color:var(--ink-soft); margin-top:2px; }
+  .pay-progress{ width:100%; background:var(--mist); border-radius:999px; height:6px; overflow:hidden; margin-top:10px; }
+  .pay-progress-fill{ height:100%; background:var(--teal-700); border-radius:999px; }
+  .pay-progress-fill.paid-full{ background:var(--gold); }
+  .pay-progress-label{ font-size:11.5px; color:var(--ink-soft); margin-top:6px; }
+  .pay-history{ margin-top:10px; padding-top:10px; border-top:1px dashed var(--line); }
+  .pay-history-row{ display:flex; justify-content:space-between; font-size:12px; color:var(--ink-soft); padding:3px 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="eyebrow">AMSA Marketing &amp; PR Agency</span>
+  <h1>Creator Portal</h1>
+  <div class="ar" style="font-size:14px;font-weight:700;margin-bottom:4px;">بوابة المؤثرين</div>
+  <p class="sub">Check your application status, assigned campaign, and pricing.</p>
+
+  <!-- STEP: login -->
+  <div class="panel" id="stepEmail">
+    <div class="field" data-field="email">
+      <label>Your registered email <span class="ar">بريدك الإلكتروني المسجل</span></label>
+      <input type="email" id="emailInput" placeholder="you@example.com">
+      <div class="err">Enter the email you registered with.</div>
+    </div>
+    <div class="field" data-field="regId">
+      <label>Your registration number <span class="ar">رقم التسجيل الخاص بك</span></label>
+      <input type="text" id="regIdInput" placeholder="AMSA-00001" style="text-transform:uppercase;">
+      <div class="err">Enter the registration number from your success screen.</div>
+    </div>
+    <button class="btn" id="loginBtn">View my info</button>
+    <div class="hint">Your registration number is your password — you got it on the success screen after signing up.</div>
+  </div>
+
+  <!-- STEP: result -->
+  <div class="panel hidden" id="stepResult">
+    <div id="resultBody"></div>
+    <button class="btn btn-ghost" id="logoutBtn" style="margin-top:20px;">Check another email</button>
+  </div>
+</div>
+
+<script>
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyqGQr5yPgaYvhLiYzdqwGK4puzpEHJ4gAqy9cQbT0k0iWQF9KB-gHfJzZ8xRq1OwmD/exec";
+
+let currentEmail = '';
+
+function fieldEl(name){ return document.querySelector(`[data-field="${name}"]`); }
+function setError(name){ fieldEl(name).classList.add('invalid'); }
+function clearError(name){ const f=fieldEl(name); if(f) f.classList.remove('invalid'); }
+
+function showStep(id){
+  ['stepEmail','stepResult'].forEach(s=>{
+    document.getElementById(s).classList.toggle('hidden', s!==id);
+  });
+}
+
+document.getElementById('loginBtn').addEventListener('click', () => {
+  const email = document.getElementById('emailInput').value.trim();
+  const registrationId = document.getElementById('regIdInput').value.trim();
+  let ok = true;
+
+  if(!email || !/^\S+@\S+\.\S+$/.test(email)){
+    setError('email');
+    ok = false;
+  } else clearError('email');
+
+  if(!registrationId){
+    setError('regId');
+    ok = false;
+  } else clearError('regId');
+
+  if(!ok) return;
+
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true;
+  btn.textContent = 'Checking…';
+
+  fetch(WEB_APP_URL, {
+    method: 'POST',
+    headers: {'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify({ action: 'login', email, registrationId })
+  })
+  .then(r => r.json())
+  .then(res => {
+    btn.disabled = false;
+    btn.textContent = 'View my info';
+    if(res.result === 'success'){
+      currentEmail = email;
+      renderResult(res.data);
+      showStep('stepResult');
+    } else if(res.result === 'invalid'){
+      fieldEl('regId').querySelector('.err').textContent = "That email and registration number don't match our records.";
+      setError('regId');
+    } else {
+      alert('Something went wrong. Please try again.');
+    }
+  })
+  .catch(() => {
+    btn.disabled = false;
+    btn.textContent = 'View my info';
+    alert('Could not reach the server. Check your connection and try again.');
+  });
+});
+
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  currentEmail = '';
+  document.getElementById('emailInput').value = '';
+  document.getElementById('regIdInput').value = '';
+  showStep('stepEmail');
+});
+
+function renderResult(data){
+  const body = document.getElementById('resultBody');
+
+  let html = `
+    <div class="result-row">
+      <div class="result-label">Registration #</div>
+      <div class="result-value">${data['Registration ID'] || '—'}</div>
+    </div>
+    <div class="result-row">
+      <div class="result-label">Name</div>
+      <div class="result-value">${data['Name'] || '—'}</div>
+    </div>
+    <div class="result-row">
+      <div class="result-label">Platforms</div>
+      <div class="result-value">${data['Social Media Platform'] || '—'}</div>
+    </div>
+    <div class="result-row">
+      <div class="result-label">Category</div>
+      <div class="result-value">${data['Content-Based Categories'] || '—'}</div>
+    </div>
+    <div class="result-row">
+      <div class="result-label">Your submitted price</div>
+      <div class="result-value">${data['Price per post (SAR)'] ? data['Price per post (SAR)'] + ' SAR' : '—'}</div>
+    </div>
+  `;
+
+  const campaigns = data.campaigns || [];
+
+  html += `<div class="section-title">Your Campaigns${campaigns.length ? ' (' + campaigns.length + ')' : ''}</div>`;
+
+  if(campaigns.length === 0){
+    html += `<div class="empty-note">No campaigns assigned yet. Check back soon — the AMSA team reviews new applications regularly.</div>`;
+  } else {
+    html += campaigns.map(c => {
+      const target = c.payoutTarget || 0;
+      const paid = c.paid || 0;
+      const remaining = c.remaining || 0;
+      const pct = target > 0 ? Math.min(100, Math.round((paid/target)*100)) : 0;
+      const isPending = c.paymentStatus !== 'Paid';
+
+      let historyHtml = '';
+      if(c.paymentHistory && c.paymentHistory.length){
+        historyHtml = `<div class="pay-history">` + c.paymentHistory.slice().reverse().map(p => `
+          <div class="pay-history-row">
+            <span>${p.date || '—'}${p.method ? ' · ' + p.method : ''}</span>
+            <span>${(p.amount||0).toLocaleString()} SAR</span>
+          </div>
+        `).join('') + `</div>`;
+      }
+
+      return `<div class="campaign-card">
+        <div class="campaign-card-top">
+          <div>
+            <div class="campaign-company">${c.companyName || 'Campaign'}</div>
+            ${c.campaignTitle ? `<div class="campaign-title">${c.campaignTitle}</div>` : ''}
+          </div>
+          <span class="status-pill${isPending ? ' pending' : ''}">${c.paymentStatus}</span>
+        </div>
+        <div class="result-row" style="padding:6px 0;">
+          <div class="result-label">Payout target</div>
+          <div class="result-value">${target.toLocaleString()} SAR</div>
+        </div>
+        <div class="result-row" style="padding:6px 0;">
+          <div class="result-label">Paid so far</div>
+          <div class="result-value">${paid.toLocaleString()} SAR</div>
+        </div>
+        <div class="pay-progress"><div class="pay-progress-fill${pct>=100?' paid-full':''}" style="width:${pct}%;"></div></div>
+        <div class="pay-progress-label">${remaining > 0 ? remaining.toLocaleString() + ' SAR remaining' : 'Fully paid'}</div>
+        ${historyHtml}
+      </div>`;
+    }).join('');
+  }
+
+  body.innerHTML = html;
+}
+</script>
+</body>
+</html>
